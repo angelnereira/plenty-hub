@@ -7,7 +7,7 @@ export default async function Home() {
   const session = await auth();
   const user = session?.user;
 
-  if (user) redirect("/dashboard");
+
   return (
     <div className="flex min-h-screen flex-col bg-[#020617] text-slate-200 selection:bg-blue-500/30">
       {/* Navigation */}
