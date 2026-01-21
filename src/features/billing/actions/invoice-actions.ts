@@ -65,5 +65,6 @@ export async function createInvoice(formData: any) {
 
     revalidatePath('/dashboard/invoices');
     revalidatePath('/dashboard');
-    redirect('/dashboard/invoices');
+
+    return { success: true, invoiceId: invoice.id };
 }

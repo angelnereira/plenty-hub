@@ -17,8 +17,9 @@ import {
 import Link from 'next/link';
 import { createInvoice } from '@/features/billing/actions/invoice-actions';
 import { formatCurrency, calculateTotals, ITBMS_MAPPING } from '@/features/billing/utils/financials';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
 import { InvoicePDF } from './invoice-pdf';
+import { useRouter } from 'next/navigation';
 
 export default function NewInvoiceForm({ customers, products, tenantId }: any) {
     const [customerMode, setCustomerMode] = useState('existing'); // existing | manual
@@ -114,10 +115,12 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
 
     const isFormValid = (customerMode === 'existing' ? !!customerId : !!customerData.name) && items.every(item => item.description && item.unitPrice > 0);
 
+    const router = useRouter();
+
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            await createInvoice({
+            const result = await createInvoice({
                 tenantId,
                 customerId: customerMode === 'existing' ? customerId : null,
                 manualCustomer: customerMode === 'manual' ? customerData : null,
@@ -125,6 +128,22 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                 ...totals,
                 number: invoiceNumber
             });
+
+            if (result?.success) {
+                // Automated PDF Generation & Download
+                const blob = await pdf(<InvoicePDF invoice={invoiceDataForPDF} />).toBlob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${invoiceNumber}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                // Redirect after download triggered
+                router.push('/dashboard/invoices');
+            }
         } catch (error) {
             console.error(error);
             setLoading(false);
