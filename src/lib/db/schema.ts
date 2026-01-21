@@ -56,7 +56,7 @@ export const verificationTokens = pgTable("verificationToken", {
 
 export const auditLogs = pgTable('audit_logs', {
     id: uuid('id').defaultRandom().primaryKey(),
-    tenantId: uuid('tenant_id').references(() => tenants.id), // Nullable for system-level actions? Or strictly multi-tenant
+    tenantId: uuid('tenant_id').references(() => tenants.id),
     usersId: uuid('user_id').references(() => users.id),
     action: text('action').notNull(),
     entity: text('entity').notNull(),
@@ -72,12 +72,14 @@ export const customers = pgTable('customers', {
     tenantId: uuid('tenant_id').references(() => tenants.id).notNull(),
     name: text('name').notNull(),
     type: text('type').default('B2C').notNull(),
+    clientType: text('client_type').default('02').notNull(), // 01=Contribuyente, 02=Consumidor Final, 04=Extranjero
     ruc: text('ruc'),
+    dv: text('dv'),
     email: text('email'),
     phone: text('phone'),
     address: text('address'),
     version: integer('version').default(1).notNull(),
-    clv: integer('clv').default(0), // Value in cents or handle with Decimal type logic in app
+    clv: integer('clv').default(0),
     avgTicket: integer('avg_ticket').default(0),
     frequency: integer('frequency').default(0),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -114,12 +116,13 @@ export const invoices = pgTable('invoices', {
     id: uuid('id').defaultRandom().primaryKey(),
     tenantId: uuid('tenant_id').references(() => tenants.id).notNull(),
     customerId: uuid('customer_id').references(() => customers.id).notNull(),
-    number: text('number').notNull(), // Sequential number (e.g. INV-001)
-    status: text('status').default('draft').notNull(), // draft, issued, paid, void
+    number: text('number').notNull(),
+    status: text('status').default('draft').notNull(),
     issuedAt: timestamp('issued_at'),
     dueDate: timestamp('due_date'),
     subtotal: integer('subtotal').notNull(),
     taxTotal: integer('tax_total').notNull(),
+    totalDiscount: integer('total_discount').default(0).notNull(),
     total: integer('total').notNull(),
     currency: text('currency').default('USD').notNull(),
     notes: text('notes'),
@@ -138,6 +141,8 @@ export const invoiceItems = pgTable('invoice_items', {
     description: text('description').notNull(),
     quantity: integer('quantity').notNull(),
     unitPrice: integer('unit_price').notNull(),
+    discount: integer('discount').default(0).notNull(),
     total: integer('total').notNull(),
     taxRate: integer('tax_rate').default(0).notNull(),
+    taxCode: text('tax_code').default('01').notNull(),
 });

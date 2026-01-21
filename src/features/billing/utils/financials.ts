@@ -1,14 +1,23 @@
 import Decimal from 'decimal.js';
 
+export const ITBMS_MAPPING: Record<string, number> = {
+    "00": 0,
+    "01": 700,
+    "02": 1000,
+    "03": 1500
+};
+
 export interface LineItem {
     quantity: number;
-    unitPrice: number;
-    taxRate: number; // in basis points (e.g. 700 = 7%)
+    unitPrice: number; // in cents
+    discount?: number; // per unit discount in cents
+    taxCode: string;   // "00", "01", "02", "03"
 }
 
 export interface InvoiceTotals {
     subtotal: number;
     taxTotal: number;
+    totalDiscount: number;
     total: number;
 }
 
@@ -18,23 +27,32 @@ export interface InvoiceTotals {
 export function calculateTotals(items: LineItem[]): InvoiceTotals {
     let subtotal = new Decimal(0);
     let taxTotal = new Decimal(0);
+    let totalDiscount = new Decimal(0);
 
     items.forEach(item => {
         const qty = new Decimal(item.quantity);
         const price = new Decimal(item.unitPrice);
-        const itemTotal = qty.times(price);
+        const disc = new Decimal(item.discount || 0);
 
-        // Tax calculation per item for better precision matching line items in PDF
-        const rate = new Decimal(item.taxRate).div(10000);
-        const tax = itemTotal.times(rate);
+        // Price per item after discount
+        const discountedUnitPrice = price.minus(disc);
+        const itemSubtotal = qty.times(discountedUnitPrice);
+        const itemDiscountTotal = qty.times(disc);
 
-        subtotal = subtotal.plus(itemTotal);
+        // Tax calculation based on code
+        const rateBasis = ITBMS_MAPPING[item.taxCode] || 0;
+        const rate = new Decimal(rateBasis).div(10000);
+        const tax = itemSubtotal.times(rate);
+
+        subtotal = subtotal.plus(itemSubtotal);
         taxTotal = taxTotal.plus(tax);
+        totalDiscount = totalDiscount.plus(itemDiscountTotal);
     });
 
     return {
-        subtotal: subtotal.round().toNumber(), // Stored in cents, so we round to nearest integer
+        subtotal: subtotal.round().toNumber(),
         taxTotal: taxTotal.round().toNumber(),
+        totalDiscount: totalDiscount.round().toNumber(),
         total: subtotal.plus(taxTotal).round().toNumber()
     };
 }

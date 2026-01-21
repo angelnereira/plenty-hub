@@ -6,13 +6,25 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createInvoice(formData: any) {
-    let { tenantId, customerId, manualCustomer, items, subtotal, taxTotal, total, number } = formData;
+    let {
+        tenantId,
+        customerId,
+        manualCustomer,
+        items,
+        subtotal,
+        taxTotal,
+        totalDiscount,
+        total,
+        number
+    } = formData;
 
     if (manualCustomer) {
         const [newCustomer] = await db.insert(customers).values({
             tenantId,
             name: manualCustomer.name,
             ruc: manualCustomer.ruc,
+            dv: manualCustomer.dv,
+            clientType: manualCustomer.clientType || '02',
             email: manualCustomer.email,
             address: manualCustomer.address,
             type: manualCustomer.type || 'B2C',
@@ -31,6 +43,7 @@ export async function createInvoice(formData: any) {
         issuedAt: new Date(),
         subtotal,
         taxTotal,
+        totalDiscount: totalDiscount || 0,
         total,
         currency: 'USD',
     }).returning();
@@ -43,8 +56,9 @@ export async function createInvoice(formData: any) {
                 description: item.description,
                 quantity: item.quantity,
                 unitPrice: item.unitPrice,
+                discount: item.discount || 0,
                 total: item.total,
-                taxRate: item.taxRate || 0,
+                taxCode: item.taxCode || '01',
             }))
         );
     }
