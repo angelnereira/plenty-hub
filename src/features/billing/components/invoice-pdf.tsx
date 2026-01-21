@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Font, Image as PDFImage } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
     page: {
@@ -152,11 +152,19 @@ export const InvoicePDF = ({ invoice }: any) => {
             <Page size="A4" style={styles.page}>
                 {/* Header */}
                 <View style={styles.header}>
-                    <View>
-                        <Text style={styles.companyName}>Plenty Hub Corp.</Text>
-                        <Text style={styles.companySub}>RUC: 155716248-2-2023 DV: 44</Text>
-                        <Text style={styles.companySub}>Pueblo Nuevo, Ciudad de Panamá</Text>
-                        <Text style={styles.companySub}>Email: admin@plentyhub.com | Tel: +507 833-0000</Text>
+                    <View style={{ flexDirection: 'row', gap: 15 }}>
+                        {invoice.logoUrl && (
+                            <PDFImage
+                                src={invoice.logoUrl}
+                                style={{ width: 60, height: 60, borderRadius: 12, objectFit: 'contain' }}
+                            />
+                        )}
+                        <View>
+                            <Text style={styles.companyName}>{invoice.tenantName || 'Plenty Hub Corp.'}</Text>
+                            <Text style={styles.companySub}>RUC: {invoice.tenantRuc || '155716248-2-2023'} DV: {invoice.tenantDv || '44'}</Text>
+                            <Text style={styles.companySub}>{invoice.tenantAddress || 'Pueblo Nuevo, Ciudad de Panamá'}</Text>
+                            <Text style={styles.companySub}>Email: {invoice.tenantEmail || 'admin@plentyhub.com'} | Tel: {invoice.tenantTel || '+507 833-0000'}</Text>
+                        </View>
                     </View>
                     <View>
                         <Text style={styles.invoiceTitle}>FACTURA ELECTRÓNICA</Text>

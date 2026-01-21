@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { customers, products } from '@/lib/db/schema';
+import { customers, products, tenants } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import NewInvoiceForm from '@/features/billing/components/new-invoice-form';
 
@@ -15,9 +15,10 @@ export default async function NewInvoicePage() {
         tenantId = firstTenant?.id;
     }
 
-    const [customerList, productList] = await Promise.all([
+    const [customerList, productList, tenant] = await Promise.all([
         db.select().from(customers).where(eq(customers.tenantId, tenantId)),
-        db.select().from(products).where(eq(products.tenantId, tenantId))
+        db.select().from(products).where(eq(products.tenantId, tenantId)),
+        db.query.tenants.findFirst({ where: eq(tenants.id, tenantId) })
     ]);
 
     return (
@@ -25,6 +26,7 @@ export default async function NewInvoicePage() {
             customers={customerList}
             products={productList}
             tenantId={tenantId}
+            tenant={tenant}
         />
     );
 }

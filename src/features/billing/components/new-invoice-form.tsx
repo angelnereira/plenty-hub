@@ -20,9 +20,10 @@ import { formatCurrency, calculateTotals, ITBMS_MAPPING } from '@/features/billi
 import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
 import { InvoicePDF } from './invoice-pdf';
 import { useRouter } from 'next/navigation';
+import { LogoUpload } from './logo-upload';
 
-export default function NewInvoiceForm({ customers, products, tenantId }: any) {
-    const [customerMode, setCustomerMode] = useState('existing'); // existing | manual
+export default function NewInvoiceForm({ customers, products, tenantId, tenant }: any) {
+    const [customerMode, setCustomerMode] = useState('anonymous'); // existing | manual | anonymous
     const [customerData, setCustomerData] = useState({
         name: '',
         ruc: '',
@@ -46,6 +47,15 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
     const [step, setStep] = useState(1); // 1: Edit, 2: Review
 
     const selectedCustomer = useMemo(() => {
+        if (customerMode === 'anonymous') return {
+            name: 'Consumidor Final',
+            ruc: '',
+            dv: '',
+            email: '',
+            address: 'Panamá',
+            clientType: '02',
+            type: 'B2C'
+        };
         if (customerMode === 'manual') return customerData;
         return customers.find((c: any) => c.id === customerId);
     }, [customerId, customers, customerMode, customerData]);
@@ -89,31 +99,42 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
         }
 
         // Calculate line total for UI feedback
-        // total = qty * (unitPrice - discount)
-        const qty = item.quantity;
-        const up = item.unitPrice;
-        const ds = item.discount || 0;
-        item.total = qty * (up - ds);
+        item.total = item.quantity * Math.max(0, item.unitPrice - item.discount);
 
         newItems[index] = item;
         setItems(newItems);
     };
-
-    const totals = useMemo(() => {
-        return calculateTotals(items.map(i => ({
-            quantity: i.quantity,
-            unitPrice: i.unitPrice,
-            discount: i.discount || 0,
-            taxCode: i.taxCode || '01'
-        })));
-    }, [items]);
 
     const invoiceNumber = useMemo(() =>
         `INV-${Math.floor(Math.random() * 90000 + 10000)}`,
         []
     );
 
-    const isFormValid = (customerMode === 'existing' ? !!customerId : !!customerData.name) && items.every(item => item.description && item.unitPrice > 0);
+    const totals = useMemo(() => calculateTotals(items), [items]);
+
+    const invoiceDataForPDF = useMemo(() => ({
+        number: invoiceNumber,
+        items,
+        ...totals,
+        customerName: selectedCustomer?.name,
+        customerRuc: selectedCustomer?.ruc,
+        customerDv: selectedCustomer?.dv,
+        customerEmail: selectedCustomer?.email,
+        customerAddress: selectedCustomer?.address,
+        customerType: customerMode === 'anonymous' ? '02' : selectedCustomer?.clientType,
+        logoUrl: tenant?.logoUrl,
+        tenantName: tenant?.name || 'Plenty Hub Corp.',
+        tenantRuc: "155716248-2-2023",
+        tenantDv: "44",
+        tenantAddress: "Pueblo Nuevo, Ciudad de Panamá",
+        tenantEmail: "admin@plentyhub.com",
+        tenantTel: "+507 833-0000"
+    }), [invoiceNumber, items, totals, selectedCustomer, customerMode, tenant]);
+
+    const isFormValid = useMemo(() => (
+        customerMode === 'anonymous' ||
+        (customerMode === 'existing' ? !!customerId : !!customerData.name)
+    ) && items.every(item => item.description && item.unitPrice >= 0), [customerMode, customerId, customerData, items]);
 
     const router = useRouter();
 
@@ -130,7 +151,6 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
             });
 
             if (result?.success) {
-                // Automated PDF Generation & Download
                 const blob = await pdf(<InvoicePDF invoice={invoiceDataForPDF} />).toBlob();
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -140,8 +160,6 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
-
-                // Redirect after download triggered
                 router.push('/dashboard/invoices');
             }
         } catch (error) {
@@ -150,21 +168,8 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
         }
     };
 
-    const invoiceDataForPDF = {
-        number: invoiceNumber,
-        customerName: selectedCustomer?.name || 'Cliente',
-        customerRuc: selectedCustomer?.ruc,
-        customerDv: selectedCustomer?.dv,
-        customerEmail: selectedCustomer?.email,
-        customerAddress: selectedCustomer?.address,
-        customerType: selectedCustomer?.clientType || (selectedCustomer?.type === 'B2B' ? '01' : '02'),
-        items,
-        ...totals
-    };
-
     return (
         <div className="p-8 max-w-6xl mx-auto">
-            {/* Header with Progress */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div className="flex items-center gap-4">
                     <Link href="/dashboard/invoices" className="p-2.5 hover:bg-slate-800 rounded-2xl text-slate-400 transition-all hover:scale-105 active:scale-95">
@@ -195,10 +200,8 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
             {step === 1 ? (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
-                        {/* Customer Section */}
                         <section className="bg-slate-900 border border-slate-800 p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 blur-[80px] group-hover:bg-blue-600/10 transition-all"></div>
-
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-800/50 pb-6">
                                 <div className="flex items-center gap-3">
                                     <div className="h-10 w-10 bg-blue-600/10 rounded-xl flex items-center justify-center">
@@ -206,23 +209,49 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                     </div>
                                     <h3 className="text-lg font-bold text-white uppercase tracking-wider text-[10px]">Información Fiscal del Cliente</h3>
                                 </div>
-                                <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                                <div className="flex bg-slate-950 p-1.5 rounded-[22px] border border-slate-800/60 shadow-inner relative group/nav">
+                                    <div
+                                        className="absolute h-[calc(100%-12px)] top-1.5 transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-blue-600 rounded-[16px] shadow-[0_8px_20px_rgba(37,99,235,0.3)]"
+                                        style={{
+                                            left: customerMode === 'anonymous' ? '6px' : customerMode === 'existing' ? 'calc(33.33% + 4px)' : 'calc(66.66% + 2px)',
+                                            width: 'calc(33.33% - 8px)'
+                                        }}
+                                    />
                                     <button
-                                        onClick={() => setCustomerMode('existing')}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${customerMode === 'existing' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500'}`}
+                                        type="button"
+                                        onClick={() => setCustomerMode('anonymous')}
+                                        className={`relative z-10 flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${customerMode === 'anonymous' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
                                     >
-                                        Registrado
+                                        Consumidor Final
                                     </button>
                                     <button
-                                        onClick={() => setCustomerMode('manual')}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${customerMode === 'manual' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500'}`}
+                                        type="button"
+                                        onClick={() => setCustomerMode('existing')}
+                                        className={`relative z-10 flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${customerMode === 'existing' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
                                     >
-                                        Manual
+                                        Lista Clientes
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setCustomerMode('manual')}
+                                        className={`relative z-10 flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${customerMode === 'manual' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                                    >
+                                        Nuevo Cliente
                                     </button>
                                 </div>
                             </div>
 
-                            {customerMode === 'existing' ? (
+                            {customerMode === 'anonymous' ? (
+                                <div className="bg-blue-600/5 border border-blue-600/10 p-6 rounded-2xl flex items-center gap-4 animate-in fade-in zoom-in duration-300">
+                                    <div className="h-12 w-12 bg-blue-600/20 rounded-2xl flex items-center justify-center">
+                                        <UserIcon className="h-6 w-6 text-blue-500" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white font-bold text-lg">Receptor: Consumidor Final</p>
+                                        <p className="text-slate-500 text-sm">Facturación rápida para clientes no registrados o ventas al detal.</p>
+                                    </div>
+                                </div>
+                            ) : customerMode === 'existing' ? (
                                 <select
                                     value={customerId}
                                     onChange={(e) => setCustomerId(e.target.value)}
@@ -321,7 +350,6 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                             )}
                         </section>
 
-                        {/* Items Section */}
                         <section className="bg-slate-900 border border-slate-800 p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
                             <div className="flex items-center justify-between mb-8 border-b border-slate-800/50 pb-6">
                                 <div className="flex items-center gap-3">
@@ -342,9 +370,10 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
 
                             <div className="space-y-6">
                                 {items.map((item, index) => (
-                                    <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-5 p-6 bg-slate-950 rounded-[24px] border border-slate-800/50 group/item hover:border-blue-500/30 transition-all shadow-inner">
-                                        <div className="md:col-span-6 space-y-4">
-                                            <div className="flex items-center gap-2">
+                                    <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-5 p-6 bg-slate-950 rounded-[28px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-600/0 group-hover/item:bg-blue-600/40 rounded-full transition-all"></div>
+                                        <div className="md:col-span-6 space-y-3 pl-4">
+                                            <div className="flex items-center gap-3">
                                                 <select
                                                     value={item.productId || ''}
                                                     onChange={(e) => {
@@ -366,7 +395,7 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                                             updateItem(index, 'productId', null);
                                                         }
                                                     }}
-                                                    className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-slate-400 outline-none focus:border-blue-500"
+                                                    className="flex-1 bg-slate-900/50 border border-slate-800/60 rounded-[14px] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer"
                                                 >
                                                     <option value="">-- Catálogo de Productos --</option>
                                                     {products.map((p: any) => (
@@ -376,12 +405,12 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                                 <select
                                                     value={item.taxCode}
                                                     onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                    className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-blue-500 outline-none focus:border-blue-500"
+                                                    className="bg-blue-600/10 border border-blue-600/20 rounded-[14px] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all"
                                                 >
-                                                    <option value="01">ITBMS 7%</option>
-                                                    <option value="02">ITBMS 10%</option>
-                                                    <option value="03">ITBMS 15%</option>
-                                                    <option value="00">Exento (0%)</option>
+                                                    <option value="01">7%</option>
+                                                    <option value="02">10%</option>
+                                                    <option value="03">15%</option>
+                                                    <option value="00">Exento</option>
                                                 </select>
                                             </div>
                                             <input
@@ -389,62 +418,63 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                                 placeholder="Descripción del servicio o producto..."
                                                 value={item.description}
                                                 onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                className="w-full bg-transparent border-none text-white text-lg focus:ring-0 placeholder:text-slate-800 font-bold p-0 tracking-tight"
+                                                className="w-full bg-transparent border-none text-white text-base focus:ring-0 placeholder:text-slate-800 font-bold p-0 tracking-tight"
                                             />
                                         </div>
 
-                                        <div className="md:col-span-2 space-y-4">
+                                        <div className="md:col-span-2">
                                             <div className="flex flex-col gap-1.5">
                                                 <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest pl-2">Cantidad</span>
-                                                <div className="flex items-center bg-slate-900 rounded-xl border border-slate-800 group-focus-within/item:border-blue-500/50 transition-colors px-2">
+                                                <div className="flex items-center bg-slate-900/50 rounded-[18px] border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-2 box-border">
                                                     <input
                                                         type="number"
                                                         value={item.quantity}
                                                         onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                        className="w-full bg-transparent border-none text-white text-sm font-bold focus:ring-0 p-3 text-center"
+                                                        className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-3 text-center tabular-nums"
                                                     />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="md:col-span-3 space-y-4">
-                                            <div className="grid grid-cols-2 gap-2">
+                                        <div className="md:col-span-3">
+                                            <div className="grid grid-cols-2 gap-3">
                                                 <div className="flex flex-col gap-1.5">
                                                     <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest pl-2">P. Unitario</span>
-                                                    <div className="flex items-center bg-slate-900 rounded-xl border border-slate-800 group-focus-within/item:border-blue-500/50 transition-colors px-3">
-                                                        <span className="text-slate-600 text-xs">$</span>
+                                                    <div className="flex items-center bg-slate-900/50 rounded-[18px] border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3">
+                                                        <span className="text-slate-700 text-[10px] font-bold">$</span>
                                                         <input
                                                             type="number"
                                                             step="0.01"
                                                             value={item.unitPrice / 100}
                                                             onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                            className="w-full bg-transparent border-none text-white text-sm font-bold focus:ring-0 p-3 text-right tabular-nums"
+                                                            className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-3 text-right tabular-nums"
                                                         />
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[9px] font-black text-amber-600 uppercase tracking-widest pl-2">Desc. ($)</span>
-                                                    <div className="flex items-center bg-amber-500/5 rounded-xl border border-amber-500/10 group-focus-within/item:border-amber-500/30 transition-colors px-3">
+                                                    <span className="text-[9px] font-black text-amber-600 uppercase tracking-widest pl-2">Descuento</span>
+                                                    <div className="flex items-center bg-amber-500/5 rounded-[18px] border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3">
+                                                        <span className="text-amber-500/40 text-[10px] font-bold">-$</span>
                                                         <input
                                                             type="number"
                                                             step="0.01"
                                                             value={item.discount / 100}
                                                             onChange={(e) => updateItem(index, 'discountUI', e.target.value)}
-                                                            className="w-full bg-transparent border-none text-amber-500 text-sm font-bold focus:ring-0 p-3 text-right tabular-nums"
+                                                            className="w-full bg-transparent border-none text-amber-500 text-sm font-black focus:ring-0 py-3 text-right tabular-nums"
                                                         />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="md:col-span-1 flex items-end justify-center pb-3">
+                                        <div className="md:col-span-1 flex items-end justify-center pb-2">
                                             <button
                                                 type="button"
                                                 onClick={() => removeItem(index)}
                                                 disabled={items.length === 1}
-                                                className="p-3 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-2xl disabled:opacity-0 group-hover/item:scale-110"
+                                                className="p-3.5 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-[20px] disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-0"
                                             >
-                                                <Trash2 className="h-5 w-5" />
+                                                <Trash2 className="h-4.5 w-4.5" />
                                             </button>
                                         </div>
                                     </div>
@@ -456,12 +486,13 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                     <aside className="space-y-6">
                         <div className="bg-slate-900 border-2 border-slate-800 p-8 rounded-[40px] shadow-2xl sticky top-24 overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 via-emerald-500 to-blue-600"></div>
-
+                            <div className="mb-10 pb-8 border-b border-slate-800/50">
+                                <LogoUpload tenantId={tenantId} initialLogoUrl={tenant?.logoUrl} />
+                            </div>
                             <h3 className="text-xl font-black text-white mb-8 flex items-center justify-between">
                                 Resumen Fiscal
                                 <span className="text-[10px] text-slate-500 font-mono tracking-tighter">PREVIEW_MODE</span>
                             </h3>
-
                             <div className="space-y-5 mb-10">
                                 <div className="flex justify-between items-center text-slate-500">
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Subtotal Bruto</span>
@@ -469,7 +500,6 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                         {formatCurrency(totals.subtotal + totals.totalDiscount)}
                                     </span>
                                 </div>
-
                                 {totals.totalDiscount > 0 && (
                                     <div className="flex justify-between items-center text-amber-500">
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">Descuento Total</span>
@@ -478,14 +508,12 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                         </span>
                                     </div>
                                 )}
-
                                 <div className="flex justify-between items-center text-emerald-500">
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Impuesto (ITBMS)</span>
                                     <span className="text-lg font-mono font-black italic">
                                         {formatCurrency(totals.taxTotal)}
                                     </span>
                                 </div>
-
                                 <div className="pt-8 border-t border-slate-800/50 flex flex-col gap-2">
                                     <div className="flex items-center gap-2">
                                         <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
@@ -510,7 +538,6 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                     Revisar y Continuar
                                     <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                                 </button>
-
                                 <div className="pt-4 flex items-center justify-center gap-4 border-t border-slate-800/50">
                                     <div className="flex -space-x-2">
                                         {[1, 2, 3].map(i => (
@@ -530,7 +557,6 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                 </div>
             ) : (
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-500">
-                    {/* Review Mode UI - Minimalist Deep Dark Design */}
                     <div className="bg-slate-900 border border-slate-800 rounded-[48px] shadow-[0_40px_120px_rgba(0,0,0,0.7)] overflow-hidden">
                         <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-12 flex justify-between items-center relative overflow-hidden">
                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
@@ -613,7 +639,6 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
 
                             <div className="bg-slate-950 p-12 rounded-[40px] border border-slate-800 shadow-inner relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-[100px]"></div>
-
                                 <div className="flex flex-col sm:flex-row justify-between items-end gap-12 relative z-10">
                                     <div className="space-y-6">
                                         <div className="flex items-center gap-3 text-emerald-400 font-black text-[10px] uppercase bg-emerald-400/10 px-4 py-2 rounded-2xl border border-emerald-400/20 w-fit">
@@ -641,7 +666,7 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em]">IMPORTE TOTAL NETO</p>
                                         <div className="flex items-center justify-end gap-3">
                                             <span className="text-slate-700 text-3xl font-black italic">USD</span>
-                                            <p className="text-7xl font-black text-white tracking-tighter tabular-nums drop-shadow-2xl">{formatCurrency(totals.total / 100)}</p>
+                                            <p className="text-7xl font-black text-white tracking-tighter tabular-nums drop-shadow-2xl">{formatCurrency(totals.total)}</p>
                                         </div>
                                         <div className="h-1.5 w-full bg-blue-600 rounded-full mt-4 shadow-lg shadow-blue-600/20"></div>
                                     </div>

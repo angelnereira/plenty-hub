@@ -33,10 +33,14 @@ export default async function DashboardLayout({
                 </div>
 
                 <nav className="space-y-1.5 flex-1">
-                    <SidebarLink href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
+                    {session.user.role === 'admin' && (
+                        <SidebarLink href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
+                    )}
                     <SidebarLink href="/dashboard/invoices" icon={ReceiptText} label="Facturas" />
                     <SidebarLink href="/dashboard/customers" icon={Users} label="Clientes" />
-                    <SidebarLink href="/dashboard/inventory" icon={Package} label="Inventario" />
+                    {session.user.role === 'admin' && (
+                        <SidebarLink href="/dashboard/inventory" icon={Package} label="Inventario" />
+                    )}
                 </nav>
 
                 <div className="mt-auto pt-6 border-t border-slate-800">
