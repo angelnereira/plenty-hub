@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { createInvoice } from '@/features/billing/actions/invoice-actions';
-import { formatCurrency } from '@/features/billing/utils/financials';
+import { formatCurrency, calculateTotals } from '@/features/billing/utils/financials';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { InvoicePDF } from './invoice-pdf';
 
@@ -23,7 +23,7 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
     const [customerMode, setCustomerMode] = useState('existing'); // existing | manual
     const [customerData, setCustomerData] = useState({ name: '', ruc: '', email: '', address: '', type: 'B2C' });
     const [customerId, setCustomerId] = useState('');
-    const [items, setItems] = useState<any[]>([{ description: '', quantity: 1, unitPrice: 0, total: 0, productId: null }]);
+    const [items, setItems] = useState<any[]>([{ description: '', quantity: 1, unitPrice: 0, total: 0, productId: null, taxRate: 700 }]);
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1); // 1: Edit, 2: Review
 
@@ -33,7 +33,7 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
     }, [customerId, customers, customerMode, customerData]);
 
     const addItem = () => {
-        setItems([...items, { description: '', quantity: 1, unitPrice: 0, total: 0, productId: null }]);
+        setItems([...items, { description: '', quantity: 1, unitPrice: 0, total: 0, productId: null, taxRate: 700 }]);
     };
 
     const removeItem = (index: number) => {
@@ -50,7 +50,13 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
             const qty = Math.max(1, parseInt(value) || 0);
             item.quantity = qty;
             item.total = qty * item.unitPrice;
+        } else if (field === 'unitPriceUI') {
+            // value is in dollars from the input
+            const priceInCents = Math.round((parseFloat(value) || 0) * 100);
+            item.unitPrice = priceInCents;
+            item.total = item.quantity * priceInCents;
         } else if (field === 'unitPrice') {
+            // direct cent update (from product selection)
             const price = Math.max(0, parseInt(value) || 0);
             item.unitPrice = price;
             item.total = item.quantity * price;
@@ -63,10 +69,11 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
     };
 
     const totals = useMemo(() => {
-        const subtotal = items.reduce((acc, item) => acc + item.total, 0);
-        const taxTotal = Math.round(subtotal * 0.07);
-        const total = subtotal + taxTotal;
-        return { subtotal, taxTotal, total };
+        return calculateTotals(items.map(i => ({
+            quantity: i.quantity,
+            unitPrice: i.unitPrice,
+            taxRate: i.taxRate || 700
+        })));
     }, [items]);
 
     const invoiceNumber = useMemo(() =>
@@ -252,8 +259,8 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                                                     ...newItems[index],
                                                                     productId: p.id,
                                                                     description: p.name,
-                                                                    unitPrice: p.price / 100, // Format for entry
-                                                                    total: (p.price / 100) * newItems[index].quantity
+                                                                    unitPrice: p.price, // Already in cents from DB
+                                                                    total: p.price * newItems[index].quantity
                                                                 };
                                                                 setItems(newItems);
                                                             }
@@ -293,8 +300,9 @@ export default function NewInvoiceForm({ customers, products, tenantId }: any) {
                                                 <span className="text-[10px] font-bold text-slate-600 uppercase">Precio</span>
                                                 <input
                                                     type="number"
-                                                    value={item.unitPrice}
-                                                    onChange={(e) => updateItem(index, 'unitPrice', e.target.value)}
+                                                    step="0.01"
+                                                    value={item.unitPrice / 100}
+                                                    onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
                                                     className="w-full bg-transparent border-none text-white text-sm focus:ring-0 p-2 text-right font-mono"
                                                 />
                                             </div>
