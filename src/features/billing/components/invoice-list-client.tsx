@@ -81,14 +81,14 @@ export default function InvoiceListClient({ invoices }: any) {
 
                                     {activeMenu === invoice.id && (
                                         <div className="absolute right-8 top-12 w-56 card border rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                                            <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl transition-all">
+                                            <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--muted)] rounded-xl transition-all">
                                                 <Eye className="h-4 w-4" />
                                                 Ver Detalles
                                             </button>
 
                                             {/* Note: In a real app, you'd fetch the items here or provide a dedicated endpoint */}
                                             {/* For now, we show the action but PDF requires full data which we'd need to fetch */}
-                                            <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl transition-all">
+                                            <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--muted)] rounded-xl transition-all">
                                                 <Download className="h-4 w-4" />
                                                 Descargar PDF
                                             </button>
