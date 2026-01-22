@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { ReceiptText, Search, Filter, MoreHorizontal, Download, Eye, Trash2, CheckCircle2 } from 'lucide-react';
 import { formatCurrency } from '@/features/billing/utils/financials';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { InvoicePDF } from './invoice-pdf';
+import { InvoicePDF } from './pdf/invoice-template';
 
 export default function InvoiceListClient({ invoices }: any) {
     const [searchTerm, setSearchTerm] = useState('');

@@ -20,28 +20,44 @@ export const SalesChart = ({ data }: SalesChartProps) => {
     return (
         <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                    <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="var(--border)"
+                        opacity={0.3}
+                    />
                     <XAxis
                         dataKey="date"
                         fontSize={12}
+                        stroke="var(--muted-foreground)"
                         tickFormatter={(val) => new Date(val).toLocaleDateString('es-PA', { day: '2-digit', month: 'short' })}
                     />
                     <YAxis
                         fontSize={12}
+                        stroke="var(--muted-foreground)"
                         tickFormatter={(val) => `$${val / 100}`}
                     />
                     <Tooltip
-                        formatter={(value: any) => [formatCurrency(Number(value) || 0), 'Total Sales']}
-                        labelFormatter={(label) => new Date(label).toLocaleDateString()}
+                        contentStyle={{
+                            backgroundColor: 'var(--card)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '8px',
+                            color: 'var(--foreground)',
+                        }}
+                        formatter={(value: any) => [formatCurrency(Number(value) || 0), 'Ventas']}
+                        labelFormatter={(label) => new Date(label).toLocaleDateString('es-PA', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric'
+                        })}
                     />
                     <Line
                         type="monotone"
                         dataKey="total"
-                        stroke="#2563eb"
-                        strokeWidth={2}
-                        dot={{ r: 4 }}
-                        activeDot={{ r: 6 }}
+                        stroke="#E60023"
+                        strokeWidth={3}
+                        dot={{ r: 4, fill: '#E60023', strokeWidth: 2, stroke: 'var(--card)' }}
+                        activeDot={{ r: 6, fill: '#E60023', strokeWidth: 2, stroke: 'var(--card)' }}
                     />
                 </LineChart>
             </ResponsiveContainer>
