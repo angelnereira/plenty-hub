@@ -371,7 +371,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
 
                             {/* TABLE HEADER */}
-                            <div className="hidden md:grid grid-cols-[3fr_100px_140px_160px_120px_48px] gap-4 px-6 py-3 bg-[var(--muted)]/50 border-y border-[var(--border)] items-center">
+                            <div className="hidden md:grid grid-cols-[300px_1fr_1fr_1fr_1fr_48px] gap-4 px-6 py-3 bg-[var(--muted)]/50 border-y border-[var(--border)] items-center">
                                 <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Descripción / Producto</label>
                                 <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-center">Cantidad</label>
                                 <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">Precio Unit.</label>
