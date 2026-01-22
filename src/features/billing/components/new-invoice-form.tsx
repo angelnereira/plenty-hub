@@ -370,112 +370,120 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
 
                             <div className="space-y-6">
                                 {items.map((item, index) => (
-                                    <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-5 p-6 bg-slate-950 rounded-[28px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-600/0 group-hover/item:bg-blue-600/40 rounded-full transition-all"></div>
-                                        <div className="md:col-span-6 space-y-3 pl-4">
-                                            <div className="flex items-center gap-3">
-                                                <select
-                                                    value={item.productId || ''}
-                                                    onChange={(e) => {
-                                                        const pId = e.target.value;
-                                                        if (pId) {
-                                                            const p = products.find((prod: any) => prod.id === pId);
-                                                            if (p) {
-                                                                const newItems = [...items];
-                                                                newItems[index] = {
-                                                                    ...newItems[index],
-                                                                    productId: p.id,
-                                                                    description: p.name,
-                                                                    unitPrice: p.price,
-                                                                    total: p.price * newItems[index].quantity
-                                                                };
-                                                                setItems(newItems);
-                                                            }
-                                                        } else {
-                                                            updateItem(index, 'productId', null);
+                                    <div key={index} className="flex flex-col md:flex-row gap-6 p-6 bg-slate-950 rounded-[32px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative items-start">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-blue-600/0 group-hover/item:bg-blue-600/40 rounded-full transition-all"></div>
+
+                                        {/* PRODUCT & DESCRIPTION - FLEX GROW */}
+                                        <div className="flex-1 min-w-[200px] space-y-3 pl-4">
+                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block pl-1">Ítem / Servicio</label>
+                                            <select
+                                                value={item.productId || ''}
+                                                onChange={(e) => {
+                                                    const pId = e.target.value;
+                                                    if (pId) {
+                                                        const p = products.find((prod: any) => prod.id === pId);
+                                                        if (p) {
+                                                            const newItems = [...items];
+                                                            newItems[index] = {
+                                                                ...newItems[index],
+                                                                productId: p.id,
+                                                                description: p.name,
+                                                                unitPrice: p.price,
+                                                                total: p.price * newItems[index].quantity
+                                                            };
+                                                            setItems(newItems);
                                                         }
-                                                    }}
-                                                    className="flex-1 bg-slate-900/50 border border-slate-800/60 rounded-[14px] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer"
-                                                >
-                                                    <option value="">-- Catálogo de Productos --</option>
-                                                    {products.map((p: any) => (
-                                                        <option key={p.id} value={p.id}>{p.name} (${p.price / 100})</option>
-                                                    ))}
-                                                </select>
+                                                    } else {
+                                                        updateItem(index, 'productId', null);
+                                                    }
+                                                }}
+                                                className="w-full bg-slate-900/50 border border-slate-800/60 rounded-2xl px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-slate-500 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer h-12 shadow-inner"
+                                            >
+                                                <option value="">-- Catálogo de Productos --</option>
+                                                {products.map((p: any) => (
+                                                    <option key={p.id} value={p.id}>{p.name} (${p.price / 100})</option>
+                                                ))}
+                                            </select>
+                                            <input
+                                                type="text"
+                                                placeholder="Descripción detallada..."
+                                                value={item.description}
+                                                onChange={(e) => updateItem(index, 'description', e.target.value)}
+                                                className="w-full bg-transparent border-none text-white text-base focus:ring-0 placeholder:text-slate-800 font-bold p-0 tracking-tight leading-none"
+                                            />
+                                        </div>
+
+                                        {/* CONTROLS GROUP - FLEX FIXED / SHRINKABLE */}
+                                        <div className="flex flex-wrap md:flex-nowrap items-start gap-4 w-full md:w-auto">
+                                            {/* TAX */}
+                                            <div className="w-[110px] shrink-0 space-y-2">
+                                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block pl-1">Impuesto</label>
                                                 <select
                                                     value={item.taxCode}
                                                     onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                    className="bg-blue-600/10 border border-blue-600/20 rounded-[14px] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all"
+                                                    className="w-full h-12 bg-blue-600/5 border border-blue-600/20 rounded-2xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all appearance-none text-center shadow-lg shadow-blue-500/5"
                                                 >
                                                     <option value="01">7%</option>
                                                     <option value="02">10%</option>
                                                     <option value="03">15%</option>
-                                                    <option value="00">Exento</option>
+                                                    <option value="00">0%</option>
                                                 </select>
                                             </div>
-                                            <input
-                                                type="text"
-                                                placeholder="Descripción del servicio o producto..."
-                                                value={item.description}
-                                                onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                className="w-full bg-transparent border-none text-white text-base focus:ring-0 placeholder:text-slate-800 font-bold p-0 tracking-tight"
-                                            />
-                                        </div>
 
-                                        <div className="md:col-span-2">
-                                            <div className="flex flex-col gap-1.5">
-                                                <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest pl-2">Cantidad</span>
-                                                <div className="flex items-center bg-slate-900/50 rounded-[18px] border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-2 box-border">
+                                            {/* QUANTITY */}
+                                            <div className="w-[80px] shrink-0 space-y-2">
+                                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-center">Cant.</label>
+                                                <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all h-12 shadow-inner">
                                                     <input
                                                         type="number"
                                                         value={item.quantity}
                                                         onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                        className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-3 text-center tabular-nums"
+                                                        className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-center tabular-nums"
                                                     />
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="md:col-span-3">
-                                            <div className="grid grid-cols-2 gap-3">
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest pl-2">P. Unitario</span>
-                                                    <div className="flex items-center bg-slate-900/50 rounded-[18px] border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3">
-                                                        <span className="text-slate-700 text-[10px] font-bold">$</span>
-                                                        <input
-                                                            type="number"
-                                                            step="0.01"
-                                                            value={item.unitPrice / 100}
-                                                            onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                            className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-3 text-right tabular-nums"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[9px] font-black text-amber-600 uppercase tracking-widest pl-2">Descuento</span>
-                                                    <div className="flex items-center bg-amber-500/5 rounded-[18px] border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3">
-                                                        <span className="text-amber-500/40 text-[10px] font-bold">-$</span>
-                                                        <input
-                                                            type="number"
-                                                            step="0.01"
-                                                            value={item.discount / 100}
-                                                            onChange={(e) => updateItem(index, 'discountUI', e.target.value)}
-                                                            className="w-full bg-transparent border-none text-amber-500 text-sm font-black focus:ring-0 py-3 text-right tabular-nums"
-                                                        />
-                                                    </div>
+                                            {/* UNIT PRICE */}
+                                            <div className="w-[120px] shrink-0 space-y-2">
+                                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-right pr-2">P. Unitario</label>
+                                                <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3 h-12 shadow-inner">
+                                                    <span className="text-slate-700 text-[11px] font-bold">$</span>
+                                                    <input
+                                                        type="number"
+                                                        step="0.01"
+                                                        value={item.unitPrice / 100}
+                                                        onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
+                                                        className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
+                                                    />
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="md:col-span-1 flex items-end justify-center pb-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => removeItem(index)}
-                                                disabled={items.length === 1}
-                                                className="p-3.5 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-[20px] disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-0"
-                                            >
-                                                <Trash2 className="h-4.5 w-4.5" />
-                                            </button>
+                                            {/* DISCOUNT */}
+                                            <div className="w-[120px] shrink-0 space-y-2">
+                                                <label className="text-[10px] font-black text-amber-600 uppercase tracking-widest block text-right pr-2">Descuento</label>
+                                                <div className="flex items-center bg-amber-500/5 rounded-2xl border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3 h-12 shadow-lg shadow-amber-500/5">
+                                                    <span className="text-amber-500/40 text-[11px] font-bold">-$</span>
+                                                    <input
+                                                        type="number"
+                                                        step="0.01"
+                                                        value={item.discount / 100}
+                                                        onChange={(e) => updateItem(index, 'discountUI', e.target.value)}
+                                                        className="w-full bg-transparent border-none text-amber-500 text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* ACTIONS */}
+                                            <div className="flex items-end self-stretch pb-1">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeItem(index)}
+                                                    disabled={items.length === 1}
+                                                    className="p-3 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-2xl disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-0"
+                                                >
+                                                    <Trash2 className="h-5 w-5" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
