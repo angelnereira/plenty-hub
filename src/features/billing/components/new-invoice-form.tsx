@@ -375,7 +375,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
 
                             <div className="w-full">
                                 {/* TABLE HEADER */}
-                                <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-3 px-6 py-4 bg-[var(--muted)]/30 border-y border-[var(--border)] items-center">
+                                <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-4 px-6 py-3 bg-[var(--muted)]/30 border-y border-[var(--border)] items-center">
                                     <label className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] pl-2">Descripción / Producto</label>
                                     <label className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] text-center">Cantidad</label>
                                     <label className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] text-right">Precio Unit.</label>
@@ -387,7 +387,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 <div className="divide-y divide-[var(--border)]/50">
                                     {items.map((item, index) => (
                                         <div key={index} className="group/row hover:bg-[var(--muted)]/20 transition-all relative">
-                                            <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-4 p-4 px-6 items-start">
+                                            <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-4 px-6 py-4 items-start">
 
                                                 {/* PRODUCT & DESCRIPTION */}
                                                 <div className="flex flex-col gap-2">
@@ -429,34 +429,34 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 </div>
 
                                                 {/* QUANTITY */}
-                                                <div className="flex items-center justify-center h-full pt-1">
+                                                <div className="flex items-start justify-center pt-2">
                                                     <input
                                                         type="number"
                                                         min="1"
                                                         value={item.quantity}
                                                         onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg p-2 text-center text-sm font-bold transition-all tabular-nums outline-none"
+                                                        className="w-full max-w-[80px] bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg py-2 px-1 text-center text-sm font-bold transition-all tabular-nums outline-none"
                                                     />
                                                 </div>
 
                                                 {/* UNIT PRICE */}
-                                                <div className="flex items-center justify-end h-full pt-1 relative group/price">
-                                                    <span className="text-xs font-bold text-[var(--muted-foreground)] opacity-0 group-focus-within/price:opacity-100 absolute left-2 transition-opacity">$</span>
+                                                <div className="flex items-start justify-end pt-2 relative group/price">
+                                                    <span className="text-xs font-bold text-[var(--muted-foreground)] opacity-0 group-focus-within/price:opacity-100 absolute left-2 top-4 transition-opacity">$</span>
                                                     <input
                                                         type="number"
                                                         step="0.01"
                                                         value={(item.unitPrice / 100).toFixed(2)}
                                                         onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg p-2 text-right text-sm font-bold transition-all tabular-nums outline-none"
+                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg py-2 px-2 text-right text-sm font-bold transition-all tabular-nums outline-none"
                                                     />
                                                 </div>
 
                                                 {/* TAX */}
-                                                <div className="flex items-center justify-center h-full pt-1">
+                                                <div className="flex items-start justify-center pt-2">
                                                     <select
                                                         value={item.taxCode}
                                                         onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg p-2 text-xs font-bold text-center transition-all appearance-none cursor-pointer outline-none"
+                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg py-2 px-1 text-xs font-bold text-center transition-all appearance-none cursor-pointer outline-none"
                                                     >
                                                         <option value="00">Exento</option>
                                                         <option value="01">ITBMS 7%</option>
@@ -466,14 +466,14 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 </div>
 
                                                 {/* TOTAL LINE */}
-                                                <div className="flex flex-col justify-start items-end h-full pt-3 pr-2">
+                                                <div className="flex flex-col justify-start items-end pt-4 pr-2">
                                                     <span className="text-sm font-black text-[var(--foreground)] tabular-nums tracking-tight">
                                                         {formatCurrency(item.total)}
                                                     </span>
                                                 </div>
 
                                                 {/* ACTIONS */}
-                                                <div className="flex items-center justify-center pt-2">
+                                                <div className="flex items-center justify-center pt-3">
                                                     <button
                                                         type="button"
                                                         onClick={() => removeItem(index)}
