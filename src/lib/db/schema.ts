@@ -6,6 +6,12 @@ export const tenants = pgTable('tenants', {
     name: text('name').notNull(),
     slug: text('slug').notNull().unique(),
     logoUrl: text('logo_url'),
+    ruc: text('ruc'),
+    dv: text('dv'),
+    email: text('email'),
+    phone: text('phone'),
+    address: text('address'),
+    website: text('website'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

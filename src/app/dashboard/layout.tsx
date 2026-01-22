@@ -12,7 +12,8 @@ import {
     LogOut,
     Sun,
     Moon,
-    Home
+    Home,
+    Settings
 } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
@@ -62,6 +63,7 @@ export default async function DashboardLayout({
                     {session.user.role === 'admin' && (
                         <SidebarLink href="/dashboard/inventory" icon={Package} label="Inventario" />
                     )}
+                    <SidebarLink href="/dashboard/settings" icon={Settings} label="Configuración" />
                 </nav>
 
                 <div className="mt-auto pt-6 border-t border-[var(--border)] space-y-2">
