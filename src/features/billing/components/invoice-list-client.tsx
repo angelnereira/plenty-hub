@@ -16,8 +16,8 @@ export default function InvoiceListClient({ invoices }: any) {
     );
 
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
-            <div className="p-6 border-b border-slate-800 flex flex-col md:flex-row gap-4 justify-between items-center bg-slate-900/50">
+        <div className="card border rounded-3xl overflow-hidden shadow-xl">
+            <div className="p-6 border-b border-[var(--border)] flex flex-col md:flex-row gap-4 justify-between items-center bg-[var(--muted)]">
                 <div className="relative w-full md:w-96">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                     <input
@@ -25,11 +25,11 @@ export default function InvoiceListClient({ invoices }: any) {
                         placeholder="Buscar factura por número o cliente..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ueta-red/50 transition-all font-medium"
+                        className="w-full input"
                     />
                 </div>
                 <div className="flex items-center gap-2 w-full md:w-auto">
-                    <button className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm font-bold text-slate-400 hover:bg-slate-800 transition-colors">
+                    <button className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-[var(--muted)] border border-[var(--border)] rounded-xl text-sm font-bold text-[var(--muted-foreground)] hover:bg-[var(--card)] transition-colors">
                         <Filter className="h-4 w-4" />
                         Filtrar
                     </button>
@@ -39,29 +39,29 @@ export default function InvoiceListClient({ invoices }: any) {
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="border-b border-slate-800 bg-slate-950/30">
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Número</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider">Cliente</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider">Fecha</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider">Estado</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-wider text-right">Total</th>
+                        <tr className="border-b border-[var(--border)] bg-[var(--muted)]">
+                            <th className="px-6 py-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Número</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider">Cliente</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider">Fecha</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider">Estado</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider text-right">Total</th>
                             <th className="px-6 py-4 text-right"></th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800">
+                    <tbody className="divide-y divide-[var(--border)]">
                         {filteredInvoices.map((invoice: any) => (
-                            <tr key={invoice.id} className="hover:bg-slate-800/30 transition-colors group">
+                            <tr key={invoice.id} className="hover:bg-[var(--muted)] transition-colors group">
                                 <td className="px-6 py-4">
-                                    <span className="text-sm font-bold text-white group-hover:text-ueta-red transition-colors flex items-center gap-2 tracking-tight">
-                                        <ReceiptText className="h-4 w-4 text-slate-500" />
+                                    <span className="text-sm font-bold group-hover:text-ueta-red transition-colors flex items-center gap-2 tracking-tight">
+                                        <ReceiptText className="h-4 w-4 text-[var(--muted-foreground)]" />
                                         {invoice.number}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <span className="text-sm text-slate-300 font-bold uppercase tracking-tight">{invoice.customerName}</span>
+                                    <span className="text-sm font-bold uppercase tracking-tight">{invoice.customerName}</span>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <span className="text-sm text-slate-500 font-medium">
+                                    <span className="text-sm text-[var(--muted-foreground)] font-medium">
                                         {invoice.issuedAt ? new Date(invoice.issuedAt).toLocaleDateString() : 'Pendiente'}
                                     </span>
                                 </td>
@@ -69,18 +69,18 @@ export default function InvoiceListClient({ invoices }: any) {
                                     <StatusBadge status={invoice.status} />
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <span className="text-sm font-black text-white tabular-nums">{formatCurrency(invoice.total)}</span>
+                                    <span className="text-sm font-black tabular-nums">{formatCurrency(invoice.total)}</span>
                                 </td>
                                 <td className="px-6 py-4 text-right relative">
                                     <button
                                         onClick={() => setActiveMenu(activeMenu === invoice.id ? null : invoice.id)}
-                                        className="p-2 hover:bg-slate-800 rounded-lg text-slate-500 hover:text-white transition-all"
+                                        className="p-2 hover:bg-[var(--muted)] rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all"
                                     >
                                         <MoreHorizontal className="h-4 w-4" />
                                     </button>
 
                                     {activeMenu === invoice.id && (
-                                        <div className="absolute right-8 top-12 w-56 bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="absolute right-8 top-12 w-56 card border rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                                             <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl transition-all">
                                                 <Eye className="h-4 w-4" />
                                                 Ver Detalles
@@ -93,7 +93,7 @@ export default function InvoiceListClient({ invoices }: any) {
                                                 Descargar PDF
                                             </button>
 
-                                            <div className="h-px bg-slate-800 my-2"></div>
+                                            <div className="h-px bg-[var(--border)] my-2"></div>
 
                                             <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-emerald-500/60 hover:text-emerald-500 hover:bg-emerald-500/10 rounded-xl transition-all">
                                                 <CheckCircle2 className="h-4 w-4" />
