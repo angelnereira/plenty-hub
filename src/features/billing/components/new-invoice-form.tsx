@@ -376,113 +376,135 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
 
                             {/* TABULAR HEADER */}
-                            <div className="hidden md:grid grid-cols-[1fr_110px_70px_110px_110px_48px] gap-5 px-6 pb-4 border-b border-slate-800/30 mb-2">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-5">Ítem / Servicio</label>
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Impuesto</label>
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Cant.</label>
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-right pr-2">P. Unitario</label>
-                                <label className="text-[10px] font-black text-amber-600/60 uppercase tracking-widest text-right pr-2">Descuento</label>
+                            <div className="hidden md:grid grid-cols-[2fr_140px_100px_140px_140px_48px] gap-5 px-6 pb-4 border-b border-slate-800/30 mb-2">
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest pl-5">Producto / Servicio</label>
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-center">Cantidad</label>
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">Precio Unit.</label>
+                                <label className="text-[10px] font-black text-ueta-red uppercase tracking-widest text-center">ITBMS (%)</label>
+                                <label className="text-[10px] font-black text-amber-600 uppercase tracking-widest text-right pr-2">Descuento</label>
                                 <span className="sr-only">Acciones</span>
                             </div>
 
                             <div className="space-y-4 overflow-x-auto pb-4">
                                 {items.map((item, index) => (
-                                    <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_110px_70px_110px_110px_48px] gap-4 md:gap-5 p-4 md:p-4 bg-[var(--muted)]/50 rounded-[28px] border border-[var(--border)]/40 group/item hover:border-ueta-red/20 hover:bg-[var(--muted)] transition-all duration-300 shadow-sm relative items-center">
+                                    <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_140px_100px_140px_140px_48px] gap-4 md:gap-5 p-4 md:p-6 bg-[var(--muted)]/50 rounded-[28px] border border-[var(--border)]/40 group/item hover:border-ueta-red/20 hover:bg-[var(--muted)] transition-all duration-300 shadow-sm relative items-start md:items-center">
                                         <div className="absolute left-3 top-1/2 -translate-y-1/2 w-1 h-8 bg-ueta-red/0 group-hover/item:bg-ueta-red/40 rounded-full transition-all"></div>
 
-                                        {/* PRODUCT & DESCRIPTION */}
-                                        <div className="space-y-2 pl-6 min-w-0">
-                                            <select
-                                                value={item.productId || ''}
-                                                onChange={(e) => {
-                                                    const pId = e.target.value;
-                                                    if (pId) {
-                                                        const p = products.find((prod: any) => prod.id === pId);
-                                                        if (p) {
-                                                            const newItems = [...items];
-                                                            newItems[index] = {
-                                                                ...newItems[index],
-                                                                productId: p.id,
-                                                                description: p.name,
-                                                                unitPrice: p.price,
-                                                                total: p.price * newItems[index].quantity
-                                                            };
-                                                            setItems(newItems);
+                                        {/* PRODUCT & DESCRIPTION - Full width on mobile, first column on desktop */}
+                                        <div className="space-y-3 pl-6 min-w-0">
+                                            <div>
+                                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest block mb-2">
+                                                    📦 Producto / Servicio
+                                                </label>
+                                                <select
+                                                    value={item.productId || ''}
+                                                    onChange={(e) => {
+                                                        const pId = e.target.value;
+                                                        if (pId) {
+                                                            const p = products.find((prod: any) => prod.id === pId);
+                                                            if (p) {
+                                                                const newItems = [...items];
+                                                                newItems[index] = {
+                                                                    ...newItems[index],
+                                                                    productId: p.id,
+                                                                    description: p.name,
+                                                                    unitPrice: p.price,
+                                                                    total: p.price * newItems[index].quantity
+                                                                };
+                                                                setItems(newItems);
+                                                            }
+                                                        } else {
+                                                            updateItem(index, 'productId', null);
                                                         }
-                                                    } else {
-                                                        updateItem(index, 'productId', null);
-                                                    }
-                                                }}
-                                                className="select text-[11px] font-black uppercase tracking-widest text-[var(--muted-foreground)] h-10 shadow-inner truncate"
-                                            >
-                                                <option value="">-- Catálogo --</option>
-                                                {products.map((p: any) => (
-                                                    <option key={p.id} value={p.id}>{p.name} (${p.price / 100})</option>
-                                                ))}
-                                            </select>
-                                            <input
-                                                type="text"
-                                                placeholder="Descripción detallada..."
-                                                value={item.description}
-                                                onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                className="w-full bg-transparent border-none text-white text-sm focus:ring-0 placeholder:text-slate-800 font-bold p-0 tracking-tight leading-none h-6"
-                                            />
-                                        </div>
-
-                                        {/* TAX */}
-                                        <div className="min-w-0">
-                                            <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">Impuesto</label>
-                                            <select
-                                                value={item.taxCode}
-                                                onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                className="w-full h-10 bg-ueta-red/5 border border-ueta-red/20 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-ueta-red outline-none focus:border-ueta-red/50 transition-all appearance-none text-center shadow-lg shadow-ueta-red/5"
-                                            >
-                                                <option value="01">7%</option>
-                                                <option value="02">10%</option>
-                                                <option value="03">15%</option>
-                                                <option value="00">0%</option>
-                                            </select>
+                                                    }}
+                                                    className="select text-sm font-bold"
+                                                >
+                                                    <option value="">-- Seleccionar del Catálogo --</option>
+                                                    {products.map((p: any) => (
+                                                        <option key={p.id} value={p.id}>{p.name} (${(p.price / 100).toFixed(2)})</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="text-[9px] font-bold text-[var(--muted-foreground)] uppercase block mb-1">
+                                                    Descripción Detallada
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Ingrese descripción del producto o servicio..."
+                                                    value={item.description}
+                                                    onChange={(e) => updateItem(index, 'description', e.target.value)}
+                                                    className="input text-sm font-medium"
+                                                />
+                                            </div>
                                         </div>
 
                                         {/* QUANTITY */}
                                         <div className="min-w-0">
-                                            <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">Cant.</label>
-                                            <div className="flex items-center bg-[var(--muted)] rounded-xl border border-[var(--border)] focus-within:border-ueta-red/40 transition-all h-10 shadow-inner">
+                                            <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest block md:hidden mb-2">
+                                                🔢 Cantidad
+                                            </label>
+                                            <div className="flex items-center bg-[var(--card)] rounded-xl border-2 border-[var(--border)] focus-within:border-ueta-red/40 transition-all h-12 shadow-sm">
                                                 <input
                                                     type="number"
+                                                    min="1"
                                                     value={item.quantity}
                                                     onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                    className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-center tabular-nums"
+                                                    className="w-full bg-transparent border-none text-center text-base font-black focus:ring-0 py-0 tabular-nums"
                                                 />
                                             </div>
                                         </div>
 
                                         {/* UNIT PRICE */}
                                         <div className="min-w-0">
-                                            <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">P. Unitario</label>
-                                            <div className="flex items-center bg-[var(--muted)] rounded-xl border border-[var(--border)] focus-within:border-ueta-red/40 transition-all px-3 h-10 shadow-inner">
-                                                <span className="text-slate-700 text-[11px] font-bold">$</span>
+                                            <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest block md:hidden mb-2">
+                                                💰 Precio Unitario
+                                            </label>
+                                            <div className="flex items-center bg-emerald-500/5 rounded-xl border-2 border-emerald-500/20 focus-within:border-emerald-500/40 transition-all px-3 h-12 shadow-sm">
+                                                <span className="text-emerald-600 text-sm font-bold mr-1">$</span>
                                                 <input
                                                     type="number"
                                                     step="0.01"
-                                                    value={item.unitPrice / 100}
+                                                    min="0"
+                                                    value={(item.unitPrice / 100).toFixed(2)}
                                                     onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                    className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
+                                                    className="w-full bg-transparent border-none text-emerald-700 text-base font-black focus:ring-0 py-0 text-right tabular-nums"
                                                 />
                                             </div>
                                         </div>
 
+                                        {/* TAX (ITBMS) */}
+                                        <div className="min-w-0">
+                                            <label className="text-[10px] font-black text-ueta-red uppercase tracking-widest block md:hidden mb-2">
+                                                📊 Tasa ITBMS
+                                            </label>
+                                            <select
+                                                value={item.taxCode}
+                                                onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
+                                                className="w-full h-12 bg-ueta-red/10 border-2 border-ueta-red/30 rounded-xl px-3 py-2 text-sm font-black uppercase tracking-wider text-ueta-red outline-none focus:border-ueta-red/60 transition-all appearance-none text-center shadow-lg shadow-ueta-red/10"
+                                            >
+                                                <option value="00">Sin ITBMS (0%)</option>
+                                                <option value="01">ITBMS 7%</option>
+                                                <option value="02">ITBMS 10%</option>
+                                                <option value="03">ITBMS 15%</option>
+                                            </select>
+                                        </div>
+
                                         {/* DISCOUNT */}
                                         <div className="min-w-0">
-                                            <label className="text-[9px] font-black text-amber-700 uppercase md:hidden block mb-1">Dcto.</label>
-                                            <div className="flex items-center bg-amber-500/5 rounded-xl border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3 h-10 shadow-lg shadow-amber-500/5">
-                                                <span className="text-amber-500/40 text-[11px] font-bold">-$</span>
+                                            <label className="text-[10px] font-black text-amber-600 uppercase tracking-widest block md:hidden mb-2">
+                                                🎫 Descuento
+                                            </label>
+                                            <div className="flex items-center bg-amber-500/5 rounded-xl border-2 border-amber-500/20 focus-within:border-amber-500/40 transition-all px-3 h-12 shadow-sm">
+                                                <span className="text-amber-600 text-sm font-bold mr-1">-$</span>
                                                 <input
                                                     type="number"
                                                     step="0.01"
-                                                    value={item.discount / 100}
+                                                    min="0"
+                                                    value={(item.discount / 100).toFixed(2)}
                                                     onChange={(e) => updateItem(index, 'discountUI', e.target.value)}
-                                                    className="w-full bg-transparent border-none text-amber-500 text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
+                                                    className="w-full bg-transparent border-none text-amber-600 text-base font-black focus:ring-0 py-0 text-right tabular-nums"
+                                                    placeholder="0.00"
                                                 />
                                             </div>
                                         </div>
@@ -493,7 +515,8 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 type="button"
                                                 onClick={() => removeItem(index)}
                                                 disabled={items.length === 1}
-                                                className="p-2 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-xl disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-100"
+                                                className="p-2.5 text-red-400 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-xl disabled:opacity-20 disabled:cursor-not-allowed group-hover/item:opacity-100 opacity-60 md:opacity-100"
+                                                title="Eliminar ítem"
                                             >
                                                 <Trash2 className="h-5 w-5" />
                                             </button>
