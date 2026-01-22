@@ -383,11 +383,11 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
 
                             <div className="divide-y divide-[var(--border)]/50">
                                 {items.map((item, index) => (
-                                    <div key={index} className="group/row transition-colors hover:bg-[var(--muted)]/30">
-                                        <div className="grid grid-cols-1 md:grid-cols-[3fr_80px_120px_100px_100px_120px_48px] gap-4 p-4 md:px-6 md:py-4 items-start relative">
-                                            {/* Mobile Indicator */}
-                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-transparent group-hover/row:bg-ueta-red transition-colors md:block hidden"></div>
+                                    <div key={index} className="group/row transition-colors hover:bg-[var(--muted)]/30 relative">
+                                        {/* Mobile Indicator - Moved outside grid */}
+                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-transparent group-hover/row:bg-ueta-red transition-colors md:block hidden z-10"></div>
 
+                                        <div className="grid grid-cols-1 md:grid-cols-[3fr_80px_120px_100px_100px_120px_48px] gap-4 p-4 md:px-6 md:py-4 items-start">
                                             {/* PRODUCT & DESCRIPTION */}
                                             <div className="space-y-2 min-w-0">
                                                 <label className="md:hidden text-[10px] font-black uppercase text-[var(--muted-foreground)] mb-1 block">Producto</label>
@@ -412,7 +412,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                             updateItem(index, 'productId', null);
                                                         }
                                                     }}
-                                                    className="w-full bg-transparent border-none p-0 text-sm font-bold text-[var(--foreground)] focus:ring-0 truncate cursor-pointer"
+                                                    className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-3 py-2 text-sm font-bold text-[var(--foreground)] focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all cursor-pointer"
                                                 >
                                                     <option value="">-- Seleccionar --</option>
                                                     {products.map((p: any) => (
@@ -421,10 +421,10 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 </select>
                                                 <textarea
                                                     rows={1}
-                                                    placeholder="Descripción detallada..."
+                                                    placeholder="Descripción detallada (opcional)"
                                                     value={item.description}
                                                     onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                    className="w-full bg-transparent border-none p-0 text-xs font-medium text-[var(--muted-foreground)] focus:ring-0 resize-none placeholder:text-[var(--muted-foreground)]/50 focus:placeholder:text-[var(--muted-foreground)] min-h-[20px]"
+                                                    className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-3 py-2 text-xs font-medium text-[var(--muted-foreground)] focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all resize-none placeholder:text-[var(--muted-foreground)]/50 min-h-[38px]"
                                                     style={{ fieldSizing: 'content' } as any}
                                                 />
                                             </div>
@@ -437,7 +437,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                     min="1"
                                                     value={item.quantity}
                                                     onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                    className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-2 py-1.5 text-center text-sm font-bold focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all tabular-nums"
+                                                    className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-2 py-2 text-center text-sm font-bold focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all tabular-nums"
                                                 />
                                             </div>
 
@@ -445,13 +445,13 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                             <div>
                                                 <label className="md:hidden text-[10px] font-black uppercase text-[var(--muted-foreground)] mb-1 block">Precio</label>
                                                 <div className="relative">
-                                                    <span className="absolute left-2 top-1.5 text-xs font-bold text-[var(--muted-foreground)]">$</span>
+                                                    <span className="absolute left-2 top-2 text-xs font-bold text-[var(--muted-foreground)]">$</span>
                                                     <input
                                                         type="number"
                                                         step="0.01"
                                                         value={(item.unitPrice / 100).toFixed(2)}
                                                         onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                        className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md pl-5 pr-2 py-1.5 text-right text-sm font-bold focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all tabular-nums"
+                                                        className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md pl-5 pr-2 py-2 text-right text-sm font-bold focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all tabular-nums"
                                                     />
                                                 </div>
                                             </div>
@@ -462,7 +462,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 <select
                                                     value={item.taxCode}
                                                     onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                    className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-2 py-1.5 text-xs font-bold text-center focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all appearance-none cursor-pointer"
+                                                    className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-2 py-2 text-xs font-bold text-center focus:border-ueta-red focus:ring-1 focus:ring-ueta-red transition-all appearance-none cursor-pointer"
                                                 >
                                                     <option value="00">0%</option>
                                                     <option value="01">7%</option>
@@ -480,14 +480,14 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                         step="0.01"
                                                         value={(item.discount / 100).toFixed(2)}
                                                         onChange={(e) => updateItem(index, 'discountUI', e.target.value)}
-                                                        className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-2 py-1.5 text-right text-sm font-medium text-amber-600 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all tabular-nums placeholder:text-amber-600/30"
+                                                        className="w-full bg-[var(--background)] border border-[var(--border)] rounded-md px-2 py-2 text-right text-sm font-medium text-amber-600 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all tabular-nums placeholder:text-amber-600/30"
                                                         placeholder="0.00"
                                                     />
                                                 </div>
                                             </div>
 
                                             {/* TOTAL LINE (Calculated) */}
-                                            <div className="flex flex-col justify-center items-end h-full pt-1.5">
+                                            <div className="flex flex-col justify-center items-end h-full pt-2">
                                                 <label className="md:hidden text-[10px] font-black uppercase text-[var(--muted-foreground)] mb-1 block">Total</label>
                                                 <span className="text-sm font-black text-[var(--foreground)] tabular-nums tracking-tight">
                                                     {formatCurrency(item.total)}
@@ -495,7 +495,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                             </div>
 
                                             {/* ACTIONS */}
-                                            <div className="flex items-center justify-center pt-1">
+                                            <div className="flex items-center justify-center pt-1.5">
                                                 <button
                                                     type="button"
                                                     onClick={() => removeItem(index)}
