@@ -371,14 +371,13 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
 
                             {/* TABLE HEADER */}
-                            <div className="hidden md:grid grid-cols-[3fr_80px_120px_100px_100px_120px_48px] gap-4 px-6 py-3 bg-[var(--muted)]/50 border-y border-[var(--border)] items-center">
-                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Producto / Descripción</label>
-                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-center">Cant.</label>
-                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">Precio</label>
-                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-center">ITBMS</label>
-                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">Desc.</label>
-                                <label className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-widest text-right">Total</label>
-                                <span className="sr-only">Acciones</span>
+                            <div className="hidden md:grid grid-cols-[3fr_100px_140px_160px_120px_48px] gap-4 px-6 py-3 bg-[var(--muted)]/50 border-y border-[var(--border)] items-center">
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Descripción / Producto</label>
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-center">Cantidad</label>
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">Precio Unit.</label>
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-center">Impuesto (ITBMS)</label>
+                                <label className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-widest text-right">Total Línea</label>
+                                <label className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-center">Acciones</label>
                             </div>
 
                             <div className="divide-y divide-[var(--border)]/50">
@@ -512,16 +511,14 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
 
                             {/* FOOTER ACTIONS */}
-                            <div className="p-4 bg-[var(--muted)]/30 border-t border-[var(--border)]">
+                            <div className="p-6 bg-[var(--muted)]/30 border-t border-[var(--border)] flex justify-end">
                                 <button
                                     type="button"
                                     onClick={addItem}
-                                    className="flex items-center gap-2 text-ueta-red hover:bg-ueta-red/10 px-4 py-2 rounded-lg transition-all text-xs font-black uppercase tracking-widest group"
+                                    className="flex items-center gap-2 bg-ueta-red hover:bg-red-700 text-white px-6 py-2.5 rounded-xl transition-all text-sm font-bold shadow-lg shadow-ueta-red/20 active:scale-95"
                                 >
-                                    <div className="bg-ueta-red text-white p-0.5 rounded-md group-hover:scale-110 transition-transform">
-                                        <Plus className="h-3 w-3" />
-                                    </div>
-                                    Añadir Nueva Línea
+                                    <Plus className="h-4 w-4" />
+                                    Añadir ítem
                                 </button>
                             </div>
                         </section>
