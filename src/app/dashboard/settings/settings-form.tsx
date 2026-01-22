@@ -55,31 +55,32 @@ export function SettingsForm({ tenant }: { tenant: any }) {
             <form onSubmit={handleSubmit} className="card p-8 bg-[var(--card)] border border-[var(--border)] rounded-3xl shadow-sm space-y-8">
                 <div>
                     <h3 className="text-sm font-black text-[var(--foreground)] uppercase tracking-widest mb-6 flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-ueta-red" />
+                        <FileText className="h-4 w-4 text-emerald-500" />
                         Datos Fiscales
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label>Razón Social / Nombre Comercial</Label>
-                            <div className="relative">
-                                <Building2 className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+                            <div className="relative group">
+                                <Building2 className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                 <input
                                     name="name"
                                     defaultValue={tenant.name}
-                                    className="input pl-10 w-full font-bold"
+                                    className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] text-white border border-gray-700/50 focus:border-indigo-500 rounded-xl py-3 pl-12 pr-4 outline-none transition-all font-bold placeholder:text-gray-600"
                                     required
+                                    placeholder="Ej. Mi Empresa S.A."
                                 />
                             </div>
                         </div>
                         <div className="grid grid-cols-[2fr_1fr] gap-4">
                             <div className="space-y-2">
                                 <Label>RUC / Cédula</Label>
-                                <div className="relative">
-                                    <FileText className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+                                <div className="relative group">
+                                    <FileText className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                     <input
                                         name="ruc"
                                         defaultValue={tenant.ruc || ''}
-                                        className="input pl-10 w-full font-mono font-medium"
+                                        className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] text-white border border-gray-700/50 focus:border-indigo-500 rounded-xl py-3 pl-12 pr-4 outline-none transition-all font-mono font-medium placeholder:text-gray-600"
                                         placeholder="0000-0000-0000"
                                     />
                                 </div>
@@ -89,7 +90,7 @@ export function SettingsForm({ tenant }: { tenant: any }) {
                                 <input
                                     name="dv"
                                     defaultValue={tenant.dv || ''}
-                                    className="input w-full font-mono text-center font-medium"
+                                    className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] text-white border border-gray-700/50 focus:border-indigo-500 rounded-xl py-3 px-4 text-center outline-none transition-all font-mono font-medium placeholder:text-gray-600"
                                     placeholder="00"
                                     maxLength={2}
                                 />
@@ -98,59 +99,59 @@ export function SettingsForm({ tenant }: { tenant: any }) {
                     </div>
                 </div>
 
-                <div className="w-full h-px bg-[var(--border)]"></div>
+                <div className="w-full h-px bg-gray-800/50"></div>
 
                 <div>
                     <h3 className="text-sm font-black text-[var(--foreground)] uppercase tracking-widest mb-6 flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-ueta-red" />
+                        <MapPin className="h-4 w-4 text-emerald-500" />
                         Contacto y Ubicación
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label>Correo Electrónico</Label>
-                            <div className="relative">
-                                <Mail className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+                            <div className="relative group">
+                                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                 <input
                                     name="email"
                                     type="email"
                                     defaultValue={tenant.email || ''}
-                                    className="input pl-10 w-full"
+                                    className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] text-white border border-gray-700/50 focus:border-indigo-500 rounded-xl py-3 pl-12 pr-4 outline-none transition-all placeholder:text-gray-600"
                                     placeholder="contacto@empresa.com"
                                 />
                             </div>
                         </div>
                         <div className="space-y-2">
                             <Label>Teléfono</Label>
-                            <div className="relative">
-                                <Phone className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+                            <div className="relative group">
+                                <Phone className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                 <input
                                     name="phone"
                                     defaultValue={tenant.phone || ''}
-                                    className="input pl-10 w-full"
+                                    className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] text-white border border-gray-700/50 focus:border-indigo-500 rounded-xl py-3 pl-12 pr-4 outline-none transition-all placeholder:text-gray-600"
                                     placeholder="+507 6000-0000"
                                 />
                             </div>
                         </div>
                         <div className="space-y-2 md:col-span-2">
                             <Label>Dirección Física</Label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+                            <div className="relative group">
+                                <MapPin className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                 <input
                                     name="address"
                                     defaultValue={tenant.address || ''}
-                                    className="input pl-10 w-full"
+                                    className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] text-white border border-gray-700/50 focus:border-indigo-500 rounded-xl py-3 pl-12 pr-4 outline-none transition-all placeholder:text-gray-600"
                                     placeholder="Ciudad, Calle, Edificio, Local..."
                                 />
                             </div>
                         </div>
                         <div className="space-y-2 md:col-span-2">
                             <Label>Sitio Web</Label>
-                            <div className="relative">
-                                <Globe className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+                            <div className="relative group">
+                                <Globe className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                 <input
                                     name="website"
                                     defaultValue={tenant.website || ''}
-                                    className="input pl-10 w-full"
+                                    className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] text-white border border-gray-700/50 focus:border-indigo-500 rounded-xl py-3 pl-12 pr-4 outline-none transition-all placeholder:text-gray-600"
                                     placeholder="https://www.miempresa.com"
                                 />
                             </div>
@@ -161,7 +162,7 @@ export function SettingsForm({ tenant }: { tenant: any }) {
                 <div className="pt-4 flex justify-end">
                     <Button
                         disabled={loading}
-                        className="bg-ueta-red hover:bg-red-700 text-white font-bold px-8 py-6 rounded-2xl shadow-lg shadow-ueta-red/25"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-6 rounded-xl shadow-lg shadow-indigo-500/25 transition-all"
                     >
                         {loading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Save className="h-5 w-5 mr-2" />}
                         Guardar Cambios
@@ -173,7 +174,7 @@ export function SettingsForm({ tenant }: { tenant: any }) {
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-    return <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--muted-foreground)] mb-1.5 ml-1">{children}</label>;
+    return <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 ml-1">{children}</label>;
 }
 
 function ImageIcon({ className }: { className?: string }) {
