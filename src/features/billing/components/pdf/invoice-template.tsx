@@ -226,52 +226,47 @@ const styles = StyleSheet.create({
         letterSpacing: 0.5,
     },
 
-    // Compliance Section
-    complianceBox: {
-        marginTop: 40,
-        backgroundColor: '#F0FDF4',
-        borderRadius: 12,
-        padding: 16,
-        borderLeftWidth: 4,
-        borderLeftColor: '#10B981',
-    },
-    complianceTitle: {
-        fontSize: 9,
-        fontWeight: 'bold',
-        color: '#059669',
-        textTransform: 'uppercase',
-        letterSpacing: 1.2,
-        marginBottom: 8,
-    },
-    complianceText: {
-        fontSize: 9,
-        color: '#065F46',
-        lineHeight: 1.5,
-        marginBottom: 3,
-    },
-
-    // Footer
     footer: {
         position: 'absolute',
-        bottom: 30,
+        bottom: 20,
         left: 40,
         right: 40,
-        paddingTop: 20,
+        paddingTop: 10,
         borderTopWidth: 1,
         borderTopColor: '#E5E7EB',
     },
     footerText: {
-        fontSize: 8,
+        fontSize: 7,
         color: '#9CA3AF',
-        lineHeight: 1.5,
+        lineHeight: 1.2,
         textAlign: 'center',
     },
     cufeText: {
-        fontSize: 7,
+        fontSize: 6,
         color: '#D1D5DB',
-        marginTop: 8,
+        marginTop: 4,
         textAlign: 'center',
         fontFamily: 'Courier',
+    },
+    complianceBox: {
+        marginTop: 10,
+        marginBottom: 10,
+        backgroundColor: '#F0FDF4',
+        borderRadius: 8,
+        padding: 8,
+        borderLeftWidth: 4,
+        borderLeftColor: '#10B981',
+    },
+    complianceTitle: {
+        fontSize: 8,
+        fontWeight: 'bold',
+        color: '#059669',
+        textTransform: 'uppercase',
+        marginBottom: 4,
+    },
+    complianceText: {
+        fontSize: 7,
+        color: '#065F46',
     }
 });
 
@@ -314,14 +309,12 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
                     <Text style={styles.headerSubtitle}>RUC: {tenant.ruc || tenant.slug}</Text>
                     {tenant.dv && <Text style={styles.headerSubtitle}>DV: {tenant.dv}</Text>}
                     <Text style={styles.headerSubtitle}>Email: {tenant.email || 'admin@plentyhub.com'}</Text>
+                    <Text style={styles.headerSubtitle}>{tenant.address || 'Panamá, Rep. de Panamá'}</Text>
                 </View>
                 <View style={styles.headerRight}>
-                    <View style={styles.statusBadge}>
-                        <Text style={styles.statusText}>
-                            {invoice.status === 'paid' ? 'PAGADO' : (invoice.status === 'draft' ? 'BORRADOR' : 'EMITIDA')}
-                        </Text>
-                    </View>
-                    <View style={styles.checkIcon} />
+                    {/* Removed Badge as requested */}
+                    <Text style={[styles.headerTitle, { fontSize: 24 }]}>FACTURA</Text>
+                    <Text style={styles.headerSubtitle}>N° {invoice.number}</Text>
                 </View>
             </View>
 
@@ -330,41 +323,46 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
                 {/* Info Section - Two Columns */}
                 <View style={styles.infoSection}>
                     <View style={styles.infoBox}>
-                        <Text style={styles.infoTitle}>RECEPTOR</Text>
+                        <Text style={styles.infoTitle}>CLIENTE / RECEPTOR</Text>
                         <Text style={styles.customerName}>{customer.name}</Text>
-                        <Text style={styles.infoText}>Tipo: {CLIENT_TYPE_MAP[customer.clientType || '02']}</Text>
-                        {customer.ruc && (
-                            <Text style={styles.infoTextBold}>
-                                RUC: {customer.ruc}-{customer.dv || '00'}
-                            </Text>
-                        )}
-                        {customer.email && <Text style={styles.infoText}>{customer.email}</Text>}
-                        {customer.address && <Text style={styles.infoText}>{customer.address}</Text>}
+                        <Text style={styles.infoText}>RUC: {customer.ruc || 'N/A'}-{customer.dv || ''}</Text>
+                        <Text style={styles.infoText}>Dirección: {customer.address || 'No registrada'}</Text>
+                        <Text style={styles.infoText}>Tel: {customer.phone || 'N/A'}</Text>
+                        <Text style={styles.infoText}>Email: {customer.email || 'N/A'}</Text>
                     </View>
 
                     <View style={styles.infoBox}>
-                        <Text style={styles.infoTitle}>DOCUMENTO</Text>
-                        <View style={styles.highlightBox}>
-                            <Text style={[styles.infoText, { color: '#9CA3AF', fontSize: 8, marginBottom: 4 }]}>CARGA LEGAL</Text>
-                            <Text style={styles.invoiceNumber}>{invoice.number}</Text>
+                        <Text style={styles.infoTitle}>DATOS DE LA FACTURA</Text>
+                        <View style={{ marginBottom: 8 }}>
+                            <Text style={styles.infoTextBold}>Fecha de Emisión:</Text>
+                            <Text style={styles.infoText}>
+                                {invoice.issuedAt ? new Date(invoice.issuedAt).toLocaleDateString('es-PA', { day: '2-digit', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('es-PA', { day: '2-digit', month: 'long', year: 'numeric' })}
+                            </Text>
                         </View>
-                        <Text style={[styles.infoTextBold, { marginTop: 12 }]}>
-                            Fecha de Emisión: {invoice.issuedAt ? new Date(invoice.issuedAt).toLocaleDateString('es-PA', { day: '2-digit', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('es-PA', { day: '2-digit', month: 'long', year: 'numeric' })}
-                        </Text>
-                        <Text style={styles.infoText}>Punto Fact.: 001</Text>
+                        <View>
+                            <Text style={styles.infoTextBold}>Condiciones de Pago:</Text>
+                            <Text style={styles.infoText}>{invoice.paymentTerms || 'Contado'}</Text>
+                        </View>
+                        {invoice.dueDate && (
+                            <View style={{ marginTop: 8 }}>
+                                <Text style={styles.infoTextBold}>Vencimiento:</Text>
+                                <Text style={styles.infoText}>
+                                    {new Date(invoice.dueDate).toLocaleDateString('es-PA', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                </Text>
+                            </View>
+                        )}
                     </View>
                 </View>
 
                 {/* Items Table */}
                 <View style={styles.tableSection}>
-                    <Text style={styles.tableSectionTitle}>• DETALLE DE OPERACIÓN</Text>
+                    <Text style={styles.tableSectionTitle}>DETALLE DE PRODUCTOS / SERVICIOS</Text>
 
                     <View style={styles.tableHeader}>
                         <Text style={[styles.colDesc, styles.headerText]}>DESCRIPCIÓN</Text>
                         <Text style={[styles.colQty, styles.headerText]}>CANT</Text>
-                        <Text style={[styles.colPrice, styles.headerText]}>P. UNIT</Text>
-                        <Text style={[styles.colDisc, styles.headerText]}>DESC.</Text>
-                        <Text style={[styles.colTax, styles.headerText]}>%</Text>
+                        <Text style={[styles.colPrice, styles.headerText]}>PRECIO</Text>
+                        <Text style={[styles.colTax, styles.headerText]}>IMP.</Text>
                         <Text style={[styles.colTotal, styles.headerText]}>TOTAL</Text>
                     </View>
 
@@ -372,19 +370,11 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
                         <View key={i} style={styles.tableRow}>
                             <View style={styles.colDesc}>
                                 <Text style={styles.itemDescription}>{item.description}</Text>
-                                {item.taxCode !== '00' && (
-                                    <Text style={{ fontSize: 8, color: '#E60023' }}>
-                                        ITBMS: {ITBMS_MAPPING[item.taxCode] / 100}%
-                                    </Text>
-                                )}
                             </View>
                             <Text style={[styles.colQty, styles.cellText]}>{item.quantity}</Text>
                             <Text style={[styles.colPrice, styles.cellText]}>{formatCurrency(item.unitPrice)}</Text>
-                            <Text style={[styles.colDisc, styles.cellText, { color: item.discount > 0 ? '#EF4444' : '#D1D5DB' }]}>
-                                {item.discount > 0 ? formatCurrency(item.discount) : '-'}
-                            </Text>
                             <Text style={[styles.colTax, styles.cellText]}>
-                                {ITBMS_MAPPING[item.taxCode] ? (ITBMS_MAPPING[item.taxCode] / 100) + '%' : '0%'}
+                                {ITBMS_MAPPING[item.taxCode] ? (ITBMS_MAPPING[item.taxCode] / 100) + '%' : 'Exento'}
                             </Text>
                             <Text style={[styles.colTotal, styles.cellTextBold]}>{formatCurrency(item.total)}</Text>
                         </View>
@@ -400,7 +390,7 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
                         </View>
                         <View style={styles.totalRow}>
                             <Text style={styles.totalLabel}>Impuestos (ITBMS)</Text>
-                            <Text style={[styles.totalValue, { color: '#10B981' }]}>{formatCurrency(invoice.taxTotal)}</Text>
+                            <Text style={[styles.totalValue, { color: '#111827' }]}>{formatCurrency(invoice.taxTotal)}</Text>
                         </View>
                         {invoice.totalDiscount > 0 && (
                             <View style={styles.totalRow}>
@@ -409,34 +399,40 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
                             </View>
                         )}
                         <View style={styles.grandTotalRow}>
-                            <Text style={styles.grandTotalLabel}>TOTAL</Text>
+                            <Text style={styles.grandTotalLabel}>TOTAL A PAGAR</Text>
                             <Text style={styles.grandTotalValue}>{formatCurrency(invoice.total)}</Text>
                         </View>
                     </View>
                 </View>
 
-                {/* Compliance Section */}
-                <View style={styles.complianceBox}>
-                    <Text style={styles.complianceTitle}>✓ ESTRUCTURA DGI VALIDADA</Text>
-                    <Text style={styles.complianceText}>
-                        Este comprobante cumple con las especificaciones técnicas de facturación electrónica.
-                    </Text>
-                    <Text style={styles.complianceText}>
-                        Al emitir, se generará el CUFE legal validado por la DGI de Panamá.
-                    </Text>
+                {/* Signature / Approval Section */}
+                <View style={{ marginTop: 50, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
+                    <View style={{ alignItems: 'center' }}>
+                        <View style={{ width: 150, borderBottomWidth: 1, borderBottomColor: '#000', marginBottom: 5 }} />
+                        <Text style={{ fontSize: 8, color: '#374151', fontWeight: 'bold' }}>RECIBIDO CONFORME</Text>
+                        <Text style={{ fontSize: 7, color: '#6B7280' }}>Firma y Cédula</Text>
+                    </View>
+                    <View style={{ alignItems: 'center' }}>
+                        <View style={{ width: 150, borderBottomWidth: 1, borderBottomColor: '#000', marginBottom: 5 }} />
+                        <Text style={{ fontSize: 8, color: '#374151', fontWeight: 'bold' }}>AUTORIZADO POR</Text>
+                        <Text style={{ fontSize: 7, color: '#6B7280' }}>{tenant.name}</Text>
+                    </View>
                 </View>
             </View>
 
             {/* Footer */}
             <View style={styles.footer}>
-                <Text style={styles.footerText}>
-                    Documento Tributario Generado a través del Sistema Plenty Hub v2.0
-                </Text>
-                <Text style={styles.footerText}>
-                    Este documento es una representación gráfica de una factura electrónica validada por la DGI.
-                </Text>
+                <View style={styles.complianceBox}>
+                    <Text style={styles.complianceTitle}>ESTRUCTURA DGI VALIDADA</Text>
+                    <Text style={styles.complianceText}>
+                        Este documento es una representación gráfica de una factura electrónica (CUFE).
+                    </Text>
+                </View>
                 <Text style={styles.cufeText}>
                     CUFE: {invoice.cufe || '000000000-0000-0000-0000-000000000000'}
+                </Text>
+                <Text style={[styles.footerText, { marginTop: 4 }]}>
+                    Generado por Plenty Hub v2.0
                 </Text>
             </View>
         </Page>
