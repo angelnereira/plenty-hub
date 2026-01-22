@@ -368,14 +368,23 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 </button>
                             </div>
 
-                            <div className="space-y-6">
+                            {/* TABULAR HEADER */}
+                            <div className="hidden md:grid grid-cols-[1fr_110px_70px_110px_110px_48px] gap-5 px-6 pb-4 border-b border-slate-800/30 mb-2">
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-5">Ítem / Servicio</label>
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Impuesto</label>
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Cant.</label>
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-right pr-2">P. Unitario</label>
+                                <label className="text-[10px] font-black text-amber-600/60 uppercase tracking-widest text-right pr-2">Descuento</label>
+                                <span className="sr-only">Acciones</span>
+                            </div>
+
+                            <div className="space-y-4 overflow-x-auto pb-4">
                                 {items.map((item, index) => (
-                                    <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_110px_70px_110px_110px_48px] gap-4 md:gap-5 p-5 md:p-6 bg-slate-950 rounded-[32px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative items-start">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-blue-600/0 group-hover/item:bg-blue-600/40 rounded-full transition-all"></div>
+                                    <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_110px_70px_110px_110px_48px] gap-4 md:gap-5 p-4 md:p-4 bg-slate-950/40 rounded-[28px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative items-center">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-600/0 group-hover/item:bg-blue-600/40 rounded-full transition-all"></div>
 
                                         {/* PRODUCT & DESCRIPTION */}
-                                        <div className="space-y-3 pl-4 min-w-0">
-                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block pl-1">Ítem / Servicio</label>
+                                        <div className="space-y-2 pl-6 min-w-0">
                                             <select
                                                 value={item.productId || ''}
                                                 onChange={(e) => {
@@ -397,9 +406,9 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                         updateItem(index, 'productId', null);
                                                     }
                                                 }}
-                                                className="w-full bg-slate-900/50 border border-slate-800/60 rounded-2xl px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-slate-500 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer h-12 shadow-inner truncate"
+                                                className="w-full bg-slate-900/50 border border-slate-800/60 rounded-xl px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-400 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer h-10 shadow-inner truncate"
                                             >
-                                                <option value="">-- Catálogo de Productos --</option>
+                                                <option value="">-- Catálogo --</option>
                                                 {products.map((p: any) => (
                                                     <option key={p.id} value={p.id}>{p.name} (${p.price / 100})</option>
                                                 ))}
@@ -409,17 +418,17 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 placeholder="Descripción detallada..."
                                                 value={item.description}
                                                 onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                className="w-full bg-transparent border-none text-white text-base focus:ring-0 placeholder:text-slate-800 font-bold p-0 tracking-tight leading-none"
+                                                className="w-full bg-transparent border-none text-white text-sm focus:ring-0 placeholder:text-slate-800 font-bold p-0 tracking-tight leading-none h-6"
                                             />
                                         </div>
 
                                         {/* TAX */}
-                                        <div className="space-y-2 min-w-0">
-                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block pl-1">Impuesto</label>
+                                        <div className="min-w-0">
+                                            <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">Impuesto</label>
                                             <select
                                                 value={item.taxCode}
                                                 onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                className="w-full h-12 bg-blue-600/5 border border-blue-600/20 rounded-2xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all appearance-none text-center shadow-lg shadow-blue-500/5"
+                                                className="w-full h-10 bg-blue-600/5 border border-blue-600/20 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all appearance-none text-center shadow-lg shadow-blue-500/5"
                                             >
                                                 <option value="01">7%</option>
                                                 <option value="02">10%</option>
@@ -429,9 +438,9 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         </div>
 
                                         {/* QUANTITY */}
-                                        <div className="space-y-2 min-w-0">
-                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-center">Cant.</label>
-                                            <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all h-12 shadow-inner">
+                                        <div className="min-w-0">
+                                            <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">Cant.</label>
+                                            <div className="flex items-center bg-slate-900/50 rounded-xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all h-10 shadow-inner">
                                                 <input
                                                     type="number"
                                                     value={item.quantity}
@@ -442,9 +451,9 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         </div>
 
                                         {/* UNIT PRICE */}
-                                        <div className="space-y-2 min-w-0">
-                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-right pr-2">P. Unitario</label>
-                                            <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3 h-12 shadow-inner">
+                                        <div className="min-w-0">
+                                            <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">P. Unitario</label>
+                                            <div className="flex items-center bg-slate-900/50 rounded-xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3 h-10 shadow-inner">
                                                 <span className="text-slate-700 text-[11px] font-bold">$</span>
                                                 <input
                                                     type="number"
@@ -457,9 +466,9 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         </div>
 
                                         {/* DISCOUNT */}
-                                        <div className="space-y-2 min-w-0">
-                                            <label className="text-[10px] font-black text-amber-600 uppercase tracking-widest block text-right pr-2">Descuento</label>
-                                            <div className="flex items-center bg-amber-500/5 rounded-2xl border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3 h-12 shadow-lg shadow-amber-500/5">
+                                        <div className="min-w-0">
+                                            <label className="text-[9px] font-black text-amber-700 uppercase md:hidden block mb-1">Dcto.</label>
+                                            <div className="flex items-center bg-amber-500/5 rounded-xl border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3 h-10 shadow-lg shadow-amber-500/5">
                                                 <span className="text-amber-500/40 text-[11px] font-bold">-$</span>
                                                 <input
                                                     type="number"
@@ -472,12 +481,12 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         </div>
 
                                         {/* ACTIONS */}
-                                        <div className="flex items-end self-stretch pb-1">
+                                        <div className="flex items-center justify-center">
                                             <button
                                                 type="button"
                                                 onClick={() => removeItem(index)}
                                                 disabled={items.length === 1}
-                                                className="p-3 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-2xl disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-0"
+                                                className="p-2 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-xl disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-100"
                                             >
                                                 <Trash2 className="h-5 w-5" />
                                             </button>
