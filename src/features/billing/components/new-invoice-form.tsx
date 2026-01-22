@@ -370,11 +370,11 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
 
                             <div className="space-y-6">
                                 {items.map((item, index) => (
-                                    <div key={index} className="flex flex-col md:flex-row gap-6 p-6 bg-slate-950 rounded-[32px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative items-start">
+                                    <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_110px_70px_110px_110px_48px] gap-4 md:gap-5 p-5 md:p-6 bg-slate-950 rounded-[32px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative items-start">
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-blue-600/0 group-hover/item:bg-blue-600/40 rounded-full transition-all"></div>
 
-                                        {/* PRODUCT & DESCRIPTION - FLEX GROW */}
-                                        <div className="flex-1 min-w-[200px] space-y-3 pl-4">
+                                        {/* PRODUCT & DESCRIPTION */}
+                                        <div className="space-y-3 pl-4 min-w-0">
                                             <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block pl-1">Ítem / Servicio</label>
                                             <select
                                                 value={item.productId || ''}
@@ -397,7 +397,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                         updateItem(index, 'productId', null);
                                                     }
                                                 }}
-                                                className="w-full bg-slate-900/50 border border-slate-800/60 rounded-2xl px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-slate-500 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer h-12 shadow-inner"
+                                                className="w-full bg-slate-900/50 border border-slate-800/60 rounded-2xl px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-slate-500 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer h-12 shadow-inner truncate"
                                             >
                                                 <option value="">-- Catálogo de Productos --</option>
                                                 {products.map((p: any) => (
@@ -413,77 +413,74 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                             />
                                         </div>
 
-                                        {/* CONTROLS GROUP - FLEX FIXED / SHRINKABLE */}
-                                        <div className="flex flex-wrap md:flex-nowrap items-start gap-4 w-full md:w-auto">
-                                            {/* TAX */}
-                                            <div className="w-[110px] shrink-0 space-y-2">
-                                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block pl-1">Impuesto</label>
-                                                <select
-                                                    value={item.taxCode}
-                                                    onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                    className="w-full h-12 bg-blue-600/5 border border-blue-600/20 rounded-2xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all appearance-none text-center shadow-lg shadow-blue-500/5"
-                                                >
-                                                    <option value="01">7%</option>
-                                                    <option value="02">10%</option>
-                                                    <option value="03">15%</option>
-                                                    <option value="00">0%</option>
-                                                </select>
-                                            </div>
+                                        {/* TAX */}
+                                        <div className="space-y-2 min-w-0">
+                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block pl-1">Impuesto</label>
+                                            <select
+                                                value={item.taxCode}
+                                                onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
+                                                className="w-full h-12 bg-blue-600/5 border border-blue-600/20 rounded-2xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all appearance-none text-center shadow-lg shadow-blue-500/5"
+                                            >
+                                                <option value="01">7%</option>
+                                                <option value="02">10%</option>
+                                                <option value="03">15%</option>
+                                                <option value="00">0%</option>
+                                            </select>
+                                        </div>
 
-                                            {/* QUANTITY */}
-                                            <div className="w-[80px] shrink-0 space-y-2">
-                                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-center">Cant.</label>
-                                                <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all h-12 shadow-inner">
-                                                    <input
-                                                        type="number"
-                                                        value={item.quantity}
-                                                        onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                        className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-center tabular-nums"
-                                                    />
-                                                </div>
+                                        {/* QUANTITY */}
+                                        <div className="space-y-2 min-w-0">
+                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-center">Cant.</label>
+                                            <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all h-12 shadow-inner">
+                                                <input
+                                                    type="number"
+                                                    value={item.quantity}
+                                                    onChange={(e) => updateItem(index, 'quantity', e.target.value)}
+                                                    className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-center tabular-nums"
+                                                />
                                             </div>
+                                        </div>
 
-                                            {/* UNIT PRICE */}
-                                            <div className="w-[120px] shrink-0 space-y-2">
-                                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-right pr-2">P. Unitario</label>
-                                                <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3 h-12 shadow-inner">
-                                                    <span className="text-slate-700 text-[11px] font-bold">$</span>
-                                                    <input
-                                                        type="number"
-                                                        step="0.01"
-                                                        value={item.unitPrice / 100}
-                                                        onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                        className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
-                                                    />
-                                                </div>
+                                        {/* UNIT PRICE */}
+                                        <div className="space-y-2 min-w-0">
+                                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block text-right pr-2">P. Unitario</label>
+                                            <div className="flex items-center bg-slate-900/50 rounded-2xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3 h-12 shadow-inner">
+                                                <span className="text-slate-700 text-[11px] font-bold">$</span>
+                                                <input
+                                                    type="number"
+                                                    step="0.01"
+                                                    value={item.unitPrice / 100}
+                                                    onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
+                                                    className="w-full bg-transparent border-none text-white text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
+                                                />
                                             </div>
+                                        </div>
 
-                                            {/* DISCOUNT */}
-                                            <div className="w-[120px] shrink-0 space-y-2">
-                                                <label className="text-[10px] font-black text-amber-600 uppercase tracking-widest block text-right pr-2">Descuento</label>
-                                                <div className="flex items-center bg-amber-500/5 rounded-2xl border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3 h-12 shadow-lg shadow-amber-500/5">
-                                                    <span className="text-amber-500/40 text-[11px] font-bold">-$</span>
-                                                    <input
-                                                        type="number"
-                                                        step="0.01"
-                                                        value={item.discount / 100}
-                                                        onChange={(e) => updateItem(index, 'discountUI', e.target.value)}
-                                                        className="w-full bg-transparent border-none text-amber-500 text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
-                                                    />
-                                                </div>
+                                        {/* DISCOUNT */}
+                                        <div className="space-y-2 min-w-0">
+                                            <label className="text-[10px] font-black text-amber-600 uppercase tracking-widest block text-right pr-2">Descuento</label>
+                                            <div className="flex items-center bg-amber-500/5 rounded-2xl border border-amber-500/10 focus-within:border-amber-500/30 transition-all px-3 h-12 shadow-lg shadow-amber-500/5">
+                                                <span className="text-amber-500/40 text-[11px] font-bold">-$</span>
+                                                <input
+                                                    type="number"
+                                                    step="0.01"
+                                                    value={item.discount / 100}
+                                                    onChange={(e) => updateItem(index, 'discountUI', e.target.value)}
+                                                    className="w-full bg-transparent border-none text-amber-500 text-sm font-black focus:ring-0 py-0 text-right tabular-nums"
+                                                />
                                             </div>
+                                        </div>
 
-                                            {/* ACTIONS */}
-                                            <div className="flex items-end self-stretch pb-1">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeItem(index)}
-                                                    disabled={items.length === 1}
-                                                    className="p-3 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-2xl disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-0"
-                                                >
-                                                    <Trash2 className="h-5 w-5" />
-                                                </button>
-                                            </div>
+                                        {/* ACTIONS */}
+                                        <div className="flex items-end self-stretch pb-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => removeItem(index)}
+                                                disabled={items.length === 1}
+                                                className="p-3 text-slate-800 hover:text-red-500 transition-all hover:bg-red-500/10 rounded-2xl disabled:opacity-0 group-hover/item:opacity-100 opacity-0 md:opacity-0"
+                                            >
+                                                <Trash2 className="h-5 w-5" />
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
