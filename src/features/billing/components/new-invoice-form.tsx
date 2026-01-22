@@ -374,14 +374,14 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
 
                             <div className="w-full">
-                                {/* TABLE HEADER */}
-                                <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-4 px-6 py-3 bg-[var(--muted)]/30 border-y border-[var(--border)] items-center">
-                                    <label className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] pl-2">Descripción / Producto</label>
-                                    <label className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] text-center">Cantidad</label>
-                                    <label className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] text-right">Precio Unit.</label>
-                                    <label className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] text-center">Impuesto (ITBMS)</label>
-                                    <label className="text-[9px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] text-right pr-2">Total Línea</label>
-                                    <span className="sr-only">Acciones</span>
+                                {/* TABLE HEADER - Rigid Grid */}
+                                <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-4 px-6 py-3 bg-[var(--muted)]/30 border-y border-[var(--border)] items-center text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em]">
+                                    <div className="pl-2">Descripción / Producto</div>
+                                    <div className="text-right">Cantidad</div>
+                                    <div className="text-right">Precio Unit.</div>
+                                    <div className="text-right">Impuesto</div>
+                                    <div className="text-right pr-2">Total</div>
+                                    <div></div>
                                 </div>
 
                                 <div className="divide-y divide-[var(--border)]/50">
@@ -412,7 +412,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                                 updateItem(index, 'productId', null);
                                                             }
                                                         }}
-                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg p-2 text-sm font-bold text-[var(--foreground)] transition-all cursor-pointer outline-none -ml-2"
+                                                        className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg p-2 text-sm font-bold text-[var(--foreground)] transition-all cursor-pointer outline-none placeholder:text-gray-600 appearance-none"
                                                     >
                                                         <option value="">Seleccionar Producto...</option>
                                                         {products.map((p: any) => (
@@ -424,61 +424,68 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                         placeholder="Añadir detalle adicional..."
                                                         value={item.description}
                                                         onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg p-2 text-xs font-medium text-[var(--muted-foreground)] focus:text-[var(--foreground)] transition-all resize-none outline-none -ml-2 min-h-[32px] placeholder:text-[var(--muted-foreground)]/40"
+                                                        onInput={(e) => {
+                                                            const target = e.target as HTMLTextAreaElement;
+                                                            target.style.height = 'auto';
+                                                            target.style.height = `${target.scrollHeight}px`;
+                                                        }}
+                                                        style={{ minHeight: '38px' }}
+                                                        className="w-full bg-transparent hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg p-2 text-xs font-medium text-[var(--muted-foreground)] focus:text-[var(--foreground)] transition-all resize-none outline-none overflow-hidden"
                                                     />
                                                 </div>
 
                                                 {/* QUANTITY */}
-                                                <div className="flex items-start justify-center pt-2">
+                                                <div className="flex items-start justify-end pt-1">
                                                     <input
                                                         type="number"
                                                         min="1"
                                                         value={item.quantity}
                                                         onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                        className="w-full max-w-[80px] bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg py-2 px-1 text-center text-sm font-bold transition-all tabular-nums outline-none"
+                                                        className="w-full max-w-[80px] bg-[#1A1D24] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg py-2 px-3 text-right text-sm font-bold text-white transition-all outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none tabular-nums"
                                                     />
                                                 </div>
 
                                                 {/* UNIT PRICE */}
-                                                <div className="flex items-start justify-end pt-2 relative group/price">
-                                                    <span className="text-xs font-bold text-[var(--muted-foreground)] opacity-0 group-focus-within/price:opacity-100 absolute left-2 top-4 transition-opacity">$</span>
+                                                <div className="flex items-start justify-end pt-1 relative group/price">
+                                                    <span className="absolute left-3 top-3 text-gray-500 text-xs font-bold pointer-events-none">$</span>
                                                     <input
                                                         type="number"
                                                         step="0.01"
                                                         value={(item.unitPrice / 100).toFixed(2)}
                                                         onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg py-2 px-2 text-right text-sm font-bold transition-all tabular-nums outline-none"
+                                                        className="w-full bg-[#1A1D24] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg py-2 pl-6 pr-3 text-right text-sm font-bold text-white transition-all outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none tabular-nums"
                                                     />
                                                 </div>
 
                                                 {/* TAX */}
-                                                <div className="flex items-start justify-center pt-2">
+                                                <div className="flex items-start justify-end pt-1">
                                                     <select
                                                         value={item.taxCode}
                                                         onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                        className="w-full bg-transparent hover:bg-[var(--muted)]/50 focus:bg-[var(--background)] border border-transparent focus:border-[var(--border)] rounded-lg py-2 px-1 text-xs font-bold text-center transition-all appearance-none cursor-pointer outline-none"
+                                                        className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg py-2 px-2 text-xs font-bold text-right text-gray-300 transition-all appearance-none cursor-pointer outline-none"
+                                                        style={{ textAlignLast: 'right' }}
                                                     >
-                                                        <option value="00">Exento</option>
-                                                        <option value="01">ITBMS 7%</option>
-                                                        <option value="02">ITBMS 10%</option>
-                                                        <option value="03">ITBMS 15%</option>
+                                                        <option value="00">Exento (0%)</option>
+                                                        <option value="01">ITBMS (7%)</option>
+                                                        <option value="02">Alcohol (10%)</option>
+                                                        <option value="03">Tabaco (15%)</option>
                                                     </select>
                                                 </div>
 
                                                 {/* TOTAL LINE */}
-                                                <div className="flex flex-col justify-start items-end pt-4 pr-2">
-                                                    <span className="text-sm font-black text-[var(--foreground)] tabular-nums tracking-tight">
+                                                <div className="flex flex-col justify-start items-end pt-3 pr-2">
+                                                    <span className="text-sm font-black text-emerald-400 tabular-nums tracking-tight">
                                                         {formatCurrency(item.total)}
                                                     </span>
                                                 </div>
 
                                                 {/* ACTIONS */}
-                                                <div className="flex items-center justify-center pt-3">
+                                                <div className="flex items-center justify-center pt-2">
                                                     <button
                                                         type="button"
                                                         onClick={() => removeItem(index)}
                                                         disabled={items.length === 1}
-                                                        className="p-2 text-[var(--muted-foreground)]/50 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-0 disabled:cursor-not-allowed group/trash"
+                                                        className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-0 disabled:cursor-not-allowed group/trash"
                                                         title="Eliminar"
                                                     >
                                                         <Trash2 className="h-4 w-4 group-hover/trash:scale-110 transition-transform" />
