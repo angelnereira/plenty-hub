@@ -16,6 +16,10 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
+import { db } from '@/lib/db';
+import { tenants } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
+
 export default async function DashboardLayout({
     children,
 }: {
@@ -24,15 +28,27 @@ export default async function DashboardLayout({
     const session = await auth();
     if (!session) redirect('/login');
 
+    const tenant = await db.query.tenants.findFirst({
+        where: eq(tenants.id, session.user.tenantId),
+    });
+
     return (
         <div className="flex min-h-screen bg-[var(--background)] text-[var(--foreground)]">
             {/* Desktop Sidebar */}
             <aside className="hidden md:flex w-64 flex-col border-r border-[var(--border)] p-6 bg-[var(--card)]/80 backdrop-blur-lg sticky top-0 h-screen">
                 <div className="flex items-center gap-2 mb-10 px-2">
-                    <div className="bg-ueta-red p-1.5 rounded-lg shadow-lg shadow-ueta-red/20">
-                        <LayoutDashboard className="h-5 w-5 text-white" />
-                    </div>
-                    <span className="text-lg font-bold tracking-tight">Plenty <span className="text-ueta-red">Hub</span></span>
+                    {tenant?.logoUrl ? (
+                        <div className="h-10 w-auto max-w-full overflow-hidden flex items-center">
+                            <img src={tenant.logoUrl} alt="Logo" className="max-h-full object-contain" />
+                        </div>
+                    ) : (
+                        <>
+                            <div className="bg-ueta-red p-1.5 rounded-lg shadow-lg shadow-ueta-red/20">
+                                <LayoutDashboard className="h-5 w-5 text-white" />
+                            </div>
+                            <span className="text-lg font-bold tracking-tight">Plenty <span className="text-ueta-red">Hub</span></span>
+                        </>
+                    )}
                 </div>
 
                 <nav className="space-y-1.5 flex-1">

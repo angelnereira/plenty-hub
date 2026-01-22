@@ -301,7 +301,16 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
             {/* Red Header */}
             <View style={styles.redHeader}>
                 <View style={styles.headerLeft}>
-                    <Text style={styles.headerTitle}>{tenant.name || 'PLENTY HUB'}</Text>
+                    {tenant.logoUrl ? (
+                        // eslint-disable-next-line jsx-a11y/alt-text
+                        <Image
+                            src={tenant.logoUrl}
+                            style={{ height: 50, marginBottom: 10, objectFit: 'contain' }}
+                        />
+                    ) : (
+                        <Text style={styles.headerTitle}>{tenant.name || 'PLENTY HUB'}</Text>
+                    )}
+                    <Text style={styles.headerSubtitle}>{tenant.name}</Text>
                     <Text style={styles.headerSubtitle}>RUC: {tenant.ruc || tenant.slug}</Text>
                     {tenant.dv && <Text style={styles.headerSubtitle}>DV: {tenant.dv}</Text>}
                     <Text style={styles.headerSubtitle}>Email: {tenant.email || 'admin@plentyhub.com'}</Text>
