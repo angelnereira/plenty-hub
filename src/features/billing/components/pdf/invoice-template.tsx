@@ -4,187 +4,274 @@ import { formatCurrency } from '../../utils/financials';
 
 const styles = StyleSheet.create({
     page: {
-        padding: 40,
         fontFamily: 'Helvetica',
         backgroundColor: '#FFFFFF',
-        color: '#334155',
     },
-    headerRow: {
+
+    // Red Header Section
+    redHeader: {
+        backgroundColor: '#E60023',
+        padding: 30,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 30,
-        borderBottomWidth: 1,
-        borderBottomColor: '#E2E8F0',
-        paddingBottom: 20,
+        alignItems: 'center',
     },
-    brandSection: {
-        flexDirection: 'column',
+    headerLeft: {
+        flex: 1,
     },
-    brandTitle: {
-        fontSize: 24,
+    headerTitle: {
+        fontSize: 32,
         fontWeight: 'bold',
-        color: '#0F172A',
-        marginBottom: 4,
-        textTransform: 'uppercase',
+        color: '#FFFFFF',
+        marginBottom: 8,
+        letterSpacing: 1,
     },
-    brandSubtitle: {
-        fontSize: 10,
-        color: '#64748B',
+    headerSubtitle: {
+        fontSize: 11,
+        color: 'rgba(255, 255, 255, 0.9)',
+        marginBottom: 2,
     },
-    invoiceDetails: {
+    headerRight: {
         alignItems: 'flex-end',
     },
     statusBadge: {
-        paddingHorizontal: 8,
-        paddingVertical: 2,
-        borderRadius: 4,
-        backgroundColor: '#E2E8F0',
-        marginBottom: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 6,
+        borderRadius: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        marginBottom: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.3)',
     },
     statusText: {
-        fontSize: 10,
+        fontSize: 9,
         fontWeight: 'bold',
-        color: '#475569',
+        color: '#FFFFFF',
         textTransform: 'uppercase',
+        letterSpacing: 1.5,
     },
-    detailRow: {
+    checkIcon: {
+        width: 48,
+        height: 48,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: 24,
+        borderWidth: 2,
+        borderColor: '#FFFFFF',
+    },
+
+    // Content Area
+    contentArea: {
+        padding: 40,
+    },
+
+    // Info Sections (two columns)
+    infoSection: {
         flexDirection: 'row',
-        marginBottom: 2,
+        justifyContent: 'space-between',
+        marginBottom: 40,
+        paddingBottom: 30,
+        borderBottomWidth: 1,
+        borderBottomColor: '#E5E7EB',
     },
-    detailLabel: {
-        fontSize: 10,
-        color: '#64748B',
-        width: 80, // Increased for wider labels
-        textAlign: 'right',
-        marginRight: 8,
+    infoBox: {
+        flex: 1,
     },
-    detailValue: {
-        fontSize: 10,
-        color: '#0F172A',
-        fontWeight: 'bold',
-    },
-    billToSection: {
-        marginBottom: 30,
-    },
-    sectionTitle: {
-        fontSize: 10,
-        color: '#64748B',
+    infoTitle: {
+        fontSize: 9,
+        color: '#9CA3AF',
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        marginBottom: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: '#E2E8F0',
-        paddingBottom: 4,
-        width: '100%',
+        letterSpacing: 1.2,
+        marginBottom: 12,
     },
     customerName: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 'bold',
-        color: '#0F172A',
-        marginBottom: 2,
+        color: '#111827',
+        marginBottom: 6,
     },
-    customerInfo: {
+    infoText: {
         fontSize: 10,
-        color: '#475569',
-        marginBottom: 1,
+        color: '#6B7280',
+        marginBottom: 3,
+        lineHeight: 1.4,
+    },
+    infoTextBold: {
+        fontSize: 10,
+        color: '#374151',
+        fontWeight: 'bold',
+        marginBottom: 3,
+    },
+    highlightBox: {
+        backgroundColor: '#F9FAFB',
+        padding: 12,
+        borderRadius: 8,
+        borderLeftWidth: 3,
+        borderLeftColor: '#E60023',
+    },
+    invoiceNumber: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#111827',
+        letterSpacing: 0.5,
+    },
+
+    // Table Section
+    tableSection: {
+        marginBottom: 30,
+    },
+    tableSectionTitle: {
+        fontSize: 9,
+        color: '#E60023',
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        letterSpacing: 1.5,
+        marginBottom: 16,
     },
     tableHeader: {
         flexDirection: 'row',
-        backgroundColor: '#F8FAFC',
-        paddingVertical: 8,
-        paddingHorizontal: 8,
-        borderTopWidth: 1,
-        borderTopColor: '#E2E8F0',
-        borderBottomWidth: 1,
-        borderBottomColor: '#E2E8F0',
+        backgroundColor: '#F3F4F6',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+        marginBottom: 8,
     },
     tableRow: {
         flexDirection: 'row',
-        paddingVertical: 10,
-        paddingHorizontal: 8,
+        paddingVertical: 14,
+        paddingHorizontal: 16,
         borderBottomWidth: 1,
-        borderBottomColor: '#F1F5F9',
+        borderBottomColor: '#F3F4F6',
     },
+
+    // Table Columns
     colDesc: { flex: 3 },
-    colQty: { flex: 0.5, textAlign: 'center' },
-    colPrice: { flex: 1, textAlign: 'right' },
-    colDisc: { flex: 0.8, textAlign: 'right' },
-    colTax: { flex: 0.5, textAlign: 'center' },
-    colTotal: { flex: 1, textAlign: 'right' },
+    colQty: { flex: 0.6, textAlign: 'center' },
+    colPrice: { flex: 1.2, textAlign: 'right' },
+    colDisc: { flex: 1, textAlign: 'right' },
+    colTax: { flex: 0.7, textAlign: 'center' },
+    colTotal: { flex: 1.3, textAlign: 'right' },
 
     headerText: {
         fontSize: 9,
         fontWeight: 'bold',
-        color: '#475569',
+        color: '#6B7280',
         textTransform: 'uppercase',
+        letterSpacing: 0.8,
     },
     cellText: {
         fontSize: 10,
-        color: '#334155',
+        color: '#374151',
     },
     cellTextBold: {
         fontSize: 10,
-        color: '#0F172A',
+        color: '#111827',
         fontWeight: 'bold',
     },
+    itemDescription: {
+        fontSize: 11,
+        color: '#111827',
+        fontWeight: 'bold',
+        marginBottom: 2,
+    },
 
+    // Totals Section
     totalsSection: {
-        marginTop: 20,
+        marginTop: 30,
         flexDirection: 'row',
         justifyContent: 'flex-end',
     },
     totalsBox: {
-        width: 220,
-        padding: 10,
-        backgroundColor: '#F8FAFC',
-        borderRadius: 4,
+        width: 280,
+        backgroundColor: '#F9FAFB',
+        borderRadius: 12,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
     },
     totalRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 6,
+        marginBottom: 10,
     },
     totalLabel: {
-        fontSize: 10,
-        color: '#64748B',
+        fontSize: 11,
+        color: '#6B7280',
+        fontWeight: 'bold',
     },
     totalValue: {
-        fontSize: 10,
-        color: '#0F172A',
+        fontSize: 11,
+        color: '#374151',
         fontWeight: 'bold',
     },
     grandTotalRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingTop: 8,
-        marginTop: 8,
-        borderTopWidth: 1,
-        borderTopColor: '#E2E8F0',
+        paddingTop: 16,
+        marginTop: 16,
+        borderTopWidth: 2,
+        borderTopColor: '#E60023',
     },
     grandTotalLabel: {
-        fontSize: 12,
+        fontSize: 11,
         fontWeight: 'bold',
-        color: '#0F172A',
+        color: '#6B7280',
+        textTransform: 'uppercase',
+        letterSpacing: 1.5,
     },
     grandTotalValue: {
-        fontSize: 14,
+        fontSize: 24,
         fontWeight: 'bold',
-        color: '#2563EB',
+        color: '#E60023',
+        letterSpacing: 0.5,
     },
-    footerIndex: {
+
+    // Compliance Section
+    complianceBox: {
+        marginTop: 40,
+        backgroundColor: '#F0FDF4',
+        borderRadius: 12,
+        padding: 16,
+        borderLeftWidth: 4,
+        borderLeftColor: '#10B981',
+    },
+    complianceTitle: {
+        fontSize: 9,
+        fontWeight: 'bold',
+        color: '#059669',
+        textTransform: 'uppercase',
+        letterSpacing: 1.2,
+        marginBottom: 8,
+    },
+    complianceText: {
+        fontSize: 9,
+        color: '#065F46',
+        lineHeight: 1.5,
+        marginBottom: 3,
+    },
+
+    // Footer
+    footer: {
         position: 'absolute',
         bottom: 30,
         left: 40,
         right: 40,
-        textAlign: 'center',
         paddingTop: 20,
         borderTopWidth: 1,
-        borderTopColor: '#E2E8F0',
+        borderTopColor: '#E5E7EB',
     },
     footerText: {
         fontSize: 8,
-        color: '#94A3B8',
+        color: '#9CA3AF',
         lineHeight: 1.5,
+        textAlign: 'center',
+    },
+    cufeText: {
+        fontSize: 7,
+        color: '#D1D5DB',
+        marginTop: 8,
+        textAlign: 'center',
+        fontFamily: 'Courier',
     }
 });
 
@@ -211,106 +298,135 @@ interface InvoiceProps {
 export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) => (
     <Document>
         <Page size="A4" style={styles.page}>
-            {/* Header */}
-            <View style={styles.headerRow}>
-                <View style={styles.brandSection}>
-                    <Text style={styles.brandTitle}>{tenant.name || 'Plenty Hub Corp.'}</Text>
-                    <Text style={styles.brandSubtitle}>RUC: {tenant.ruc || tenant.slug}</Text>
-                    {tenant.dv && <Text style={styles.brandSubtitle}>DV: {tenant.dv}</Text>}
-                    <Text style={styles.brandSubtitle}>Email: {tenant.email || 'admin@plentyhub.com'}</Text>
+            {/* Red Header */}
+            <View style={styles.redHeader}>
+                <View style={styles.headerLeft}>
+                    <Text style={styles.headerTitle}>{tenant.name || 'PLENTY HUB'}</Text>
+                    <Text style={styles.headerSubtitle}>RUC: {tenant.ruc || tenant.slug}</Text>
+                    {tenant.dv && <Text style={styles.headerSubtitle}>DV: {tenant.dv}</Text>}
+                    <Text style={styles.headerSubtitle}>Email: {tenant.email || 'admin@plentyhub.com'}</Text>
                 </View>
-                <View style={styles.invoiceDetails}>
+                <View style={styles.headerRight}>
                     <View style={styles.statusBadge}>
-                        <Text style={styles.statusText}>{invoice.status === 'paid' ? 'PAGADO' : (invoice.status === 'draft' ? 'BORRADOR' : 'PENDIENTE')}</Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>FACTURA #</Text>
-                        <Text style={styles.detailValue}>{invoice.number}</Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>FECHA</Text>
-                        <Text style={styles.detailValue}>
-                            {invoice.issuedAt ? new Date(invoice.issuedAt).toLocaleDateString() : new Date().toLocaleDateString()}
+                        <Text style={styles.statusText}>
+                            {invoice.status === 'paid' ? 'PAGADO' : (invoice.status === 'draft' ? 'BORRADOR' : 'EMITIDA')}
                         </Text>
                     </View>
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>PUNTO FACT.</Text>
-                        <Text style={[styles.detailValue, { color: '#3b82f6' }]}>001</Text>
-                    </View>
+                    <View style={styles.checkIcon} />
                 </View>
             </View>
 
-            {/* Client Info */}
-            <View style={styles.billToSection}>
-                <Text style={styles.sectionTitle}>FACTURAR A</Text>
-                <Text style={styles.customerName}>{customer.name}</Text>
-                {customer.ruc && <Text style={styles.customerInfo}>RUC: {customer.ruc} {customer.dv ? `DV: ${customer.dv}` : ''}</Text>}
-                <Text style={styles.customerInfo}>Tipo: {CLIENT_TYPE_MAP[customer.clientType || '02'] || 'Consumidor Final'}</Text>
-                {customer.email && <Text style={styles.customerInfo}>{customer.email}</Text>}
-                {customer.address && <Text style={styles.customerInfo}>{customer.address}</Text>}
-                {customer.phone && <Text style={styles.customerInfo}>{customer.phone}</Text>}
-            </View>
+            {/* Content Area */}
+            <View style={styles.contentArea}>
+                {/* Info Section - Two Columns */}
+                <View style={styles.infoSection}>
+                    <View style={styles.infoBox}>
+                        <Text style={styles.infoTitle}>RECEPTOR</Text>
+                        <Text style={styles.customerName}>{customer.name}</Text>
+                        <Text style={styles.infoText}>Tipo: {CLIENT_TYPE_MAP[customer.clientType || '02']}</Text>
+                        {customer.ruc && (
+                            <Text style={styles.infoTextBold}>
+                                RUC: {customer.ruc}-{customer.dv || '00'}
+                            </Text>
+                        )}
+                        {customer.email && <Text style={styles.infoText}>{customer.email}</Text>}
+                        {customer.address && <Text style={styles.infoText}>{customer.address}</Text>}
+                    </View>
 
-            {/* Items Table */}
-            <View>
-                <View style={styles.tableHeader}>
-                    <Text style={[styles.colDesc, styles.headerText]}>DESCRIPCIÓN</Text>
-                    <Text style={[styles.colQty, styles.headerText]}>CANT</Text>
-                    <Text style={[styles.colPrice, styles.headerText]}>P. UNIT</Text>
-                    <Text style={[styles.colDisc, styles.headerText]}>DESC.</Text>
-                    <Text style={[styles.colTax, styles.headerText]}>%</Text>
-                    <Text style={[styles.colTotal, styles.headerText]}>TOTAL</Text>
-                </View>
-                {items.map((item, i) => (
-                    <View key={i} style={styles.tableRow}>
-                        <Text style={[styles.colDesc, styles.cellText]}>{item.description}</Text>
-                        <Text style={[styles.colQty, styles.cellText]}>{item.quantity}</Text>
-                        <Text style={[styles.colPrice, styles.cellText]}>{formatCurrency(item.unitPrice)}</Text>
-                        <Text style={[styles.colDisc, styles.cellText, { color: '#ef4444' }]}>
-                            {item.discount > 0 ? `(${formatCurrency(item.discount)})` : '-'}
-                        </Text>
-                        <Text style={[styles.colTax, styles.cellText]}>
-                            {ITBMS_MAPPING[item.taxCode] ? (ITBMS_MAPPING[item.taxCode] / 100) + '%' : '0%'}
-                        </Text>
-                        <Text style={[styles.colTotal, styles.cellTextBold]}>{formatCurrency(item.total)}</Text>
-                    </View>
-                ))}
-            </View>
-
-            {/* Totals */}
-            <View style={styles.totalsSection}>
-                <View style={styles.totalsBox}>
-                    <View style={styles.totalRow}>
-                        <Text style={styles.totalLabel}>Subtotal</Text>
-                        <Text style={styles.totalValue}>{formatCurrency(invoice.subtotal)}</Text>
-                    </View>
-                    <View style={styles.totalRow}>
-                        <Text style={styles.totalLabel}>Impuestos (ITBMS)</Text>
-                        <Text style={styles.totalValue}>{formatCurrency(invoice.taxTotal)}</Text>
-                    </View>
-                    {invoice.totalDiscount > 0 && (
-                        <View style={styles.totalRow}>
-                            <Text style={styles.totalLabel}>Descuento</Text>
-                            <Text style={[styles.totalValue, { color: '#EF4444' }]}>-{formatCurrency(invoice.totalDiscount)}</Text>
+                    <View style={styles.infoBox}>
+                        <Text style={styles.infoTitle}>DOCUMENTO</Text>
+                        <View style={styles.highlightBox}>
+                            <Text style={[styles.infoText, { color: '#9CA3AF', fontSize: 8, marginBottom: 4 }]}>CARGA LEGAL</Text>
+                            <Text style={styles.invoiceNumber}>{invoice.number}</Text>
                         </View>
-                    )}
-                    <View style={styles.grandTotalRow}>
-                        <Text style={styles.grandTotalLabel}>TOTAL</Text>
-                        <Text style={styles.grandTotalValue}>{formatCurrency(invoice.total)}</Text>
+                        <Text style={[styles.infoTextBold, { marginTop: 12 }]}>
+                            Fecha de Emisión: {invoice.issuedAt ? new Date(invoice.issuedAt).toLocaleDateString('es-PA', { day: '2-digit', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('es-PA', { day: '2-digit', month: 'long', year: 'numeric' })}
+                        </Text>
+                        <Text style={styles.infoText}>Punto Fact.: 001</Text>
                     </View>
+                </View>
+
+                {/* Items Table */}
+                <View style={styles.tableSection}>
+                    <Text style={styles.tableSectionTitle}>• DETALLE DE OPERACIÓN</Text>
+
+                    <View style={styles.tableHeader}>
+                        <Text style={[styles.colDesc, styles.headerText]}>DESCRIPCIÓN</Text>
+                        <Text style={[styles.colQty, styles.headerText]}>CANT</Text>
+                        <Text style={[styles.colPrice, styles.headerText]}>P. UNIT</Text>
+                        <Text style={[styles.colDisc, styles.headerText]}>DESC.</Text>
+                        <Text style={[styles.colTax, styles.headerText]}>%</Text>
+                        <Text style={[styles.colTotal, styles.headerText]}>TOTAL</Text>
+                    </View>
+
+                    {items.map((item, i) => (
+                        <View key={i} style={styles.tableRow}>
+                            <View style={styles.colDesc}>
+                                <Text style={styles.itemDescription}>{item.description}</Text>
+                                {item.taxCode !== '00' && (
+                                    <Text style={{ fontSize: 8, color: '#E60023' }}>
+                                        ITBMS: {ITBMS_MAPPING[item.taxCode] / 100}%
+                                    </Text>
+                                )}
+                            </View>
+                            <Text style={[styles.colQty, styles.cellText]}>{item.quantity}</Text>
+                            <Text style={[styles.colPrice, styles.cellText]}>{formatCurrency(item.unitPrice)}</Text>
+                            <Text style={[styles.colDisc, styles.cellText, { color: item.discount > 0 ? '#EF4444' : '#D1D5DB' }]}>
+                                {item.discount > 0 ? formatCurrency(item.discount) : '-'}
+                            </Text>
+                            <Text style={[styles.colTax, styles.cellText]}>
+                                {ITBMS_MAPPING[item.taxCode] ? (ITBMS_MAPPING[item.taxCode] / 100) + '%' : '0%'}
+                            </Text>
+                            <Text style={[styles.colTotal, styles.cellTextBold]}>{formatCurrency(item.total)}</Text>
+                        </View>
+                    ))}
+                </View>
+
+                {/* Totals */}
+                <View style={styles.totalsSection}>
+                    <View style={styles.totalsBox}>
+                        <View style={styles.totalRow}>
+                            <Text style={styles.totalLabel}>Subtotal</Text>
+                            <Text style={styles.totalValue}>{formatCurrency(invoice.subtotal)}</Text>
+                        </View>
+                        <View style={styles.totalRow}>
+                            <Text style={styles.totalLabel}>Impuestos (ITBMS)</Text>
+                            <Text style={[styles.totalValue, { color: '#10B981' }]}>{formatCurrency(invoice.taxTotal)}</Text>
+                        </View>
+                        {invoice.totalDiscount > 0 && (
+                            <View style={styles.totalRow}>
+                                <Text style={styles.totalLabel}>Descuento</Text>
+                                <Text style={[styles.totalValue, { color: '#EF4444' }]}>-{formatCurrency(invoice.totalDiscount)}</Text>
+                            </View>
+                        )}
+                        <View style={styles.grandTotalRow}>
+                            <Text style={styles.grandTotalLabel}>TOTAL</Text>
+                            <Text style={styles.grandTotalValue}>{formatCurrency(invoice.total)}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                {/* Compliance Section */}
+                <View style={styles.complianceBox}>
+                    <Text style={styles.complianceTitle}>✓ ESTRUCTURA DGI VALIDADA</Text>
+                    <Text style={styles.complianceText}>
+                        Este comprobante cumple con las especificaciones técnicas de facturación electrónica.
+                    </Text>
+                    <Text style={styles.complianceText}>
+                        Al emitir, se generará el CUFE legal validado por la DGI de Panamá.
+                    </Text>
                 </View>
             </View>
 
             {/* Footer */}
-            <View style={styles.footerIndex}>
-                <Text style={[styles.footerText, { fontWeight: 'bold', marginBottom: 5 }]}>
+            <View style={styles.footer}>
+                <Text style={styles.footerText}>
                     Documento Tributario Generado a través del Sistema Plenty Hub v2.0
                 </Text>
                 <Text style={styles.footerText}>
-                    Este documento es una representación gráfica de una factura electrónica validada por la
-                    Dirección General de Ingresos (DGI) de la República de Panamá.
+                    Este documento es una representación gráfica de una factura electrónica validada por la DGI.
                 </Text>
-                <Text style={[styles.footerText, { marginTop: 10, color: '#64748b' }]}>
+                <Text style={styles.cufeText}>
                     CUFE: {invoice.cufe || '000000000-0000-0000-0000-000000000000'}
                 </Text>
             </View>
