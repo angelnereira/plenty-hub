@@ -37,7 +37,9 @@ export default async function DashboardLayout({
                         <SidebarLink href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
                     )}
                     <SidebarLink href="/dashboard/invoices" icon={ReceiptText} label="Facturas" />
-                    <SidebarLink href="/dashboard/customers" icon={Users} label="Clientes" />
+                    {session.user.role !== 'billing' && (
+                        <SidebarLink href="/dashboard/customers" icon={Users} label="Clientes" />
+                    )}
                     {session.user.role === 'admin' && (
                         <SidebarLink href="/dashboard/inventory" icon={Package} label="Inventario" />
                     )}

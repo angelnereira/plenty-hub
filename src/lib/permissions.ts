@@ -1,7 +1,7 @@
 export type Action = 'create' | 'read' | 'update' | 'delete' | 'manage';
 export type Resource = 'invoices' | 'customers' | 'products' | 'users' | 'reports';
 
-export type Role = 'admin' | 'manager' | 'user' | 'viewer';
+export type Role = 'admin' | 'manager' | 'user' | 'viewer' | 'billing';
 
 export const ROLE_PERMISSIONS: Record<Role, Partial<Record<Resource, Action[]>>> = {
     admin: {
@@ -21,6 +21,11 @@ export const ROLE_PERMISSIONS: Record<Role, Partial<Record<Resource, Action[]>>>
         invoices: ['create', 'read', 'update'],
         customers: ['create', 'read', 'update'],
         products: ['read'],
+    },
+    billing: {
+        invoices: ['create', 'read', 'update', 'delete', 'manage'],
+        customers: ['read'], // Needs access to select customers for invoice
+        products: ['read'],  // Needs access to select products
     },
     viewer: {
         invoices: ['read'],

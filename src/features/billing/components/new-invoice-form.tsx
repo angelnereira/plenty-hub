@@ -12,13 +12,14 @@ import {
     CheckCircle2,
     ChevronRight,
     User as UserIcon,
-    Percent
+    Percent,
+    Mail
 } from 'lucide-react';
 import Link from 'next/link';
 import { createInvoice } from '@/features/billing/actions/invoice-actions';
 import { formatCurrency, calculateTotals, ITBMS_MAPPING } from '@/features/billing/utils/financials';
 import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
-import { InvoicePDF } from './invoice-pdf';
+import { InvoicePDF } from '@/features/billing/components/pdf/invoice-template';
 import { useRouter } from 'next/navigation';
 import { LogoUpload } from './logo-upload';
 
@@ -151,7 +152,13 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
             });
 
             if (result?.success) {
-                const blob = await pdf(<InvoicePDF invoice={invoiceDataForPDF} />).toBlob();
+                const pdfProps = {
+                    invoice: { number: invoiceNumber, ...totals, issuedAt: new Date(), status: 'paid' },
+                    items: items,
+                    customer: selectedCustomer,
+                    tenant: tenant || { name: 'Plenty Hub Corp.', slug: '155716248-2-2023' }
+                };
+                const blob = await pdf(<InvoicePDF {...pdfProps} />).toBlob();
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
@@ -697,7 +704,30 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 Editar Documento
                             </button>
 
-                            <PDFDownloadLink document={<InvoicePDF invoice={invoiceDataForPDF} />} fileName={`${invoiceNumber}.pdf`}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const subject = `Factura ${invoiceNumber} - ${tenant?.name || 'Plenty Hub'}`;
+                                    const body = `Estimado cliente,\n\nAdjunto encontrará su factura ${invoiceNumber}.\n\nSaludos,\n${tenant?.name || 'Plenty Hub'}`;
+                                    window.open(`mailto:${selectedCustomer?.email || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+                                }}
+                                className="px-5 py-5 bg-slate-800 hover:bg-slate-750 text-white font-black rounded-3xl transition-all flex items-center justify-center gap-3 whitespace-nowrap active:scale-95 border border-slate-700/50"
+                                title="Enviar por correo"
+                            >
+                                <Mail className="h-4 w-4" />
+                            </button>
+
+                            <PDFDownloadLink
+                                document={
+                                    <InvoicePDF
+                                        invoice={{ number: invoiceNumber, ...totals, issuedAt: new Date(), status: 'draft' }}
+                                        items={items}
+                                        customer={selectedCustomer}
+                                        tenant={tenant || { name: 'Plenty Hub Corp.', slug: '155716248-2-2023' }}
+                                    />
+                                }
+                                fileName={`${invoiceNumber}.pdf`}
+                            >
                                 {({ loading }) => (
                                     <button className="w-full px-8 py-5 bg-slate-800 hover:bg-slate-750 text-white font-black rounded-3xl transition-all flex items-center justify-center gap-3 whitespace-nowrap active:scale-95 border border-slate-700/50">
                                         <Download className="h-4 w-4" />
