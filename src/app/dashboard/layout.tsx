@@ -27,7 +27,7 @@ export default async function DashboardLayout({
     children: React.ReactNode;
 }) {
     const session = await auth();
-    if (!session) redirect('/login');
+    if (!session?.user?.tenantId) redirect('/login');
 
     const tenant = await db.query.tenants.findFirst({
         where: eq(tenants.id, session.user.tenantId),

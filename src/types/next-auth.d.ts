@@ -5,10 +5,12 @@ declare module "next-auth" {
         user: {
             id: string
             role: string
+            tenantId: string | null
         } & DefaultSession["user"]
     }
 
     interface User {
         role: string
+        tenantId: string | null
     }
 }
