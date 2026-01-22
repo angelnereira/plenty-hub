@@ -21,7 +21,6 @@ import { formatCurrency, calculateTotals, ITBMS_MAPPING } from '@/features/billi
 import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
 import { InvoicePDF } from '@/features/billing/components/pdf/invoice-template';
 import { useRouter } from 'next/navigation';
-import { LogoUpload } from './logo-upload';
 
 export default function NewInvoiceForm({ customers, products, tenantId, tenant }: any) {
     const [customerMode, setCustomerMode] = useState('anonymous'); // existing | manual | anonymous
@@ -205,8 +204,8 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
             </div>
 
             {step === 1 ? (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 space-y-8">
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
+                    <div className="flex-1 w-full space-y-8 min-w-0">
                         <section className="card border p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-ueta-red/5 blur-[80px] group-hover:bg-ueta-red/10 transition-all"></div>
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-800/50 pb-6">
@@ -514,13 +513,11 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                         </section>
                     </div>
 
-                    <aside className="space-y-6">
-                        <div className="card border-2 border-[var(--border)] p-8 rounded-[40px] shadow-2xl sticky top-24 overflow-hidden">
+                    <aside className="w-full lg:w-[400px] shrink-0 space-y-6 lg:sticky lg:top-8">
+                        <div className="card border-2 border-[var(--border)] p-8 rounded-[40px] shadow-2xl overflow-hidden relative">
                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-ueta-red via-emerald-500 to-ueta-red"></div>
-                            <div className="mb-10 pb-8 border-b border-slate-800/50">
-                                <LogoUpload tenantId={tenantId} initialLogoUrl={tenant?.logoUrl} />
-                            </div>
-                            <h3 className="text-xl font-black text-white mb-8 flex items-center justify-between">
+
+                            <h3 className="text-xl font-black text-white mb-8 flex items-center justify-between pt-4">
                                 Resumen Fiscal
                                 <span className="text-[10px] text-slate-500 font-mono tracking-tighter">PREVIEW_MODE</span>
                             </h3>
