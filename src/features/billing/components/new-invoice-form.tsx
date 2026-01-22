@@ -184,7 +184,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                     </Link>
                     <div>
                         <h1 className="text-3xl font-black text-white tracking-tight flex items-center gap-3">
-                            <FileText className="h-8 w-8 text-blue-500" />
+                            <FileText className="h-8 w-8 text-ueta-red" />
                             Nueva Factura
                         </h1>
                         <p className="text-slate-500 text-sm mt-1 text-balance">Configure los detalles fiscales para emitir su comprobante profesional.</p>
@@ -192,12 +192,12 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                 </div>
 
                 <div className="flex items-center gap-2 bg-slate-900/50 p-1.5 rounded-2xl border border-slate-800">
-                    <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${step === 1 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500'}`}>
+                    <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${step === 1 ? 'bg-ueta-red text-white shadow-lg shadow-ueta-red/20' : 'text-slate-500'}`}>
                         <span className="h-5 w-5 flex items-center justify-center rounded-full bg-slate-950/20 text-[10px]">1</span>
                         Edición
                     </div>
                     <ChevronRight className="h-4 w-4 text-slate-700" />
-                    <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${step === 2 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500'}`}>
+                    <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${step === 2 ? 'bg-ueta-red text-white shadow-lg shadow-ueta-red/20' : 'text-slate-500'}`}>
                         <span className="h-5 w-5 flex items-center justify-center rounded-full bg-slate-950/20 text-[10px]">2</span>
                         Revisión
                     </div>
@@ -208,17 +208,17 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
                         <section className="bg-slate-900 border border-slate-800 p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 blur-[80px] group-hover:bg-blue-600/10 transition-all"></div>
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-ueta-red/5 blur-[80px] group-hover:bg-ueta-red/10 transition-all"></div>
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-800/50 pb-6">
                                 <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 bg-blue-600/10 rounded-xl flex items-center justify-center">
-                                        <UserIcon className="h-5 w-5 text-blue-500" />
+                                    <div className="h-10 w-10 bg-ueta-red/10 rounded-xl flex items-center justify-center">
+                                        <UserIcon className="h-5 w-5 text-ueta-red" />
                                     </div>
                                     <h3 className="text-lg font-bold text-white uppercase tracking-wider text-[10px]">Información Fiscal del Cliente</h3>
                                 </div>
                                 <div className="flex bg-slate-950 p-1.5 rounded-[22px] border border-slate-800/60 shadow-inner relative group/nav">
                                     <div
-                                        className="absolute h-[calc(100%-12px)] top-1.5 transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-blue-600 rounded-[16px] shadow-[0_8px_20px_rgba(37,99,235,0.3)]"
+                                        className="absolute h-[calc(100%-12px)] top-1.5 transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-ueta-red rounded-[16px] shadow-[0_8px_20px_rgba(230,0,35,0.3)]"
                                         style={{
                                             left: customerMode === 'anonymous' ? '6px' : customerMode === 'existing' ? 'calc(33.33% + 4px)' : 'calc(66.66% + 2px)',
                                             width: 'calc(33.33% - 8px)'
@@ -249,9 +249,9 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
 
                             {customerMode === 'anonymous' ? (
-                                <div className="bg-blue-600/5 border border-blue-600/10 p-6 rounded-2xl flex items-center gap-4 animate-in fade-in zoom-in duration-300">
-                                    <div className="h-12 w-12 bg-blue-600/20 rounded-2xl flex items-center justify-center">
-                                        <UserIcon className="h-6 w-6 text-blue-500" />
+                                <div className="bg-ueta-red/5 border border-ueta-red/10 p-6 rounded-2xl flex items-center gap-4 animate-in fade-in zoom-in duration-300">
+                                    <div className="h-12 w-12 bg-ueta-red/20 rounded-2xl flex items-center justify-center">
+                                        <UserIcon className="h-6 w-6 text-ueta-red" />
                                     </div>
                                     <div>
                                         <p className="text-white font-bold text-lg">Receptor: Consumidor Final</p>
@@ -262,7 +262,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 <select
                                     value={customerId}
                                     onChange={(e) => setCustomerId(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white outline-none focus:ring-2 focus:ring-blue-600/50 transition-all appearance-none cursor-pointer text-lg font-medium"
+                                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white outline-none focus:ring-2 focus:ring-ueta-red/50 transition-all appearance-none cursor-pointer text-lg font-medium"
                                 >
                                     <option value="">Buscar o seleccionar cliente...</option>
                                     {customers.map((c: any) => (
@@ -279,7 +279,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                             <select
                                                 value={customerData.clientType}
                                                 onChange={(e) => setCustomerData({ ...customerData, clientType: e.target.value })}
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-ueta-red text-sm"
                                             >
                                                 <option value="02">Consumidor Final</option>
                                                 <option value="01">Contribuyente (Empresa/Natural)</option>
@@ -293,7 +293,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 value={customerData.email}
                                                 onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
                                                 placeholder="cliente@ejemplo.com"
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-ueta-red text-sm"
                                             />
                                         </div>
                                     </div>
@@ -306,7 +306,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 value={customerData.name}
                                                 onChange={(e) => setCustomerData({ ...customerData, name: e.target.value })}
                                                 placeholder="Ej: Ángel Nereira o Plenty Hub Corp"
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-ueta-red text-sm"
                                             />
                                         </div>
                                         {customerData.clientType === '01' && (
@@ -318,7 +318,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                         value={customerData.ruc}
                                                         onChange={(e) => setCustomerData({ ...customerData, ruc: e.target.value })}
                                                         placeholder="0-000-0000"
-                                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-blue-500 font-mono text-sm"
+                                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-ueta-red font-mono text-sm"
                                                     />
                                                 </div>
                                                 <div className="md:col-span-1">
@@ -329,7 +329,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                         value={customerData.dv}
                                                         onChange={(e) => setCustomerData({ ...customerData, dv: e.target.value })}
                                                         placeholder="00"
-                                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-blue-500 font-mono text-sm"
+                                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-ueta-red font-mono text-sm"
                                                     />
                                                 </div>
                                             </>
@@ -343,7 +343,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                             value={customerData.address}
                                             onChange={(e) => setCustomerData({ ...customerData, address: e.target.value })}
                                             placeholder="Calle, Edificio, Oficina..."
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                                            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:ring-1 focus:ring-ueta-red text-sm"
                                         />
                                     </div>
                                 </div>
@@ -368,7 +368,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 <button
                                     type="button"
                                     onClick={addItem}
-                                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all shadow-xl shadow-blue-600/20 active:scale-95"
+                                    className="flex items-center gap-2 bg-ueta-red hover:bg-red-700 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all shadow-xl shadow-ueta-red/20 active:scale-95"
                                 >
                                     <Plus className="h-4 w-4" />
                                     Añadir Ítem
@@ -387,8 +387,8 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
 
                             <div className="space-y-4 overflow-x-auto pb-4">
                                 {items.map((item, index) => (
-                                    <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_110px_70px_110px_110px_48px] gap-4 md:gap-5 p-4 md:p-4 bg-slate-950/40 rounded-[28px] border border-slate-800/40 group/item hover:border-blue-500/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative items-center">
-                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-600/0 group-hover/item:bg-blue-600/40 rounded-full transition-all"></div>
+                                    <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_110px_70px_110px_110px_48px] gap-4 md:gap-5 p-4 md:p-4 bg-slate-950/40 rounded-[28px] border border-slate-800/40 group/item hover:border-ueta-red/20 hover:bg-slate-900/40 transition-all duration-300 shadow-sm relative items-center">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 w-1 h-8 bg-ueta-red/0 group-hover/item:bg-ueta-red/40 rounded-full transition-all"></div>
 
                                         {/* PRODUCT & DESCRIPTION */}
                                         <div className="space-y-2 pl-6 min-w-0">
@@ -413,7 +413,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                         updateItem(index, 'productId', null);
                                                     }
                                                 }}
-                                                className="w-full bg-slate-900/50 border border-slate-800/60 rounded-xl px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-400 outline-none focus:border-blue-500/50 focus:bg-slate-900 transition-all cursor-pointer h-10 shadow-inner truncate"
+                                                className="w-full bg-slate-900/50 border border-slate-800/60 rounded-xl px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-400 outline-none focus:border-ueta-red/50 focus:bg-slate-900 transition-all cursor-pointer h-10 shadow-inner truncate"
                                             >
                                                 <option value="">-- Catálogo --</option>
                                                 {products.map((p: any) => (
@@ -435,7 +435,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                             <select
                                                 value={item.taxCode}
                                                 onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                className="w-full h-10 bg-blue-600/5 border border-blue-600/20 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-blue-500 outline-none focus:border-blue-500/50 transition-all appearance-none text-center shadow-lg shadow-blue-500/5"
+                                                className="w-full h-10 bg-ueta-red/5 border border-ueta-red/20 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-widest text-ueta-red outline-none focus:border-ueta-red/50 transition-all appearance-none text-center shadow-lg shadow-ueta-red/5"
                                             >
                                                 <option value="01">7%</option>
                                                 <option value="02">10%</option>
@@ -447,7 +447,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         {/* QUANTITY */}
                                         <div className="min-w-0">
                                             <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">Cant.</label>
-                                            <div className="flex items-center bg-slate-900/50 rounded-xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all h-10 shadow-inner">
+                                            <div className="flex items-center bg-slate-900/50 rounded-xl border border-slate-800/60 focus-within:border-ueta-red/40 transition-all h-10 shadow-inner">
                                                 <input
                                                     type="number"
                                                     value={item.quantity}
@@ -460,7 +460,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         {/* UNIT PRICE */}
                                         <div className="min-w-0">
                                             <label className="text-[9px] font-black text-slate-700 uppercase md:hidden block mb-1">P. Unitario</label>
-                                            <div className="flex items-center bg-slate-900/50 rounded-xl border border-slate-800/60 focus-within:border-blue-500/40 transition-all px-3 h-10 shadow-inner">
+                                            <div className="flex items-center bg-slate-900/50 rounded-xl border border-slate-800/60 focus-within:border-ueta-red/40 transition-all px-3 h-10 shadow-inner">
                                                 <span className="text-slate-700 text-[11px] font-bold">$</span>
                                                 <input
                                                     type="number"
@@ -506,7 +506,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
 
                     <aside className="space-y-6">
                         <div className="bg-slate-900 border-2 border-slate-800 p-8 rounded-[40px] shadow-2xl sticky top-24 overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 via-emerald-500 to-blue-600"></div>
+                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-ueta-red via-emerald-500 to-ueta-red"></div>
                             <div className="mb-10 pb-8 border-b border-slate-800/50">
                                 <LogoUpload tenantId={tenantId} initialLogoUrl={tenant?.logoUrl} />
                             </div>
@@ -537,11 +537,11 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 </div>
                                 <div className="pt-8 border-t border-slate-800/50 flex flex-col gap-2">
                                     <div className="flex items-center gap-2">
-                                        <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
-                                        <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em]">Total a Emitir</span>
+                                        <div className="h-2 w-2 rounded-full bg-ueta-red animate-pulse"></div>
+                                        <span className="text-[10px] font-black text-ueta-red uppercase tracking-[0.3em]">Total a Emitir</span>
                                     </div>
                                     <div className="relative">
-                                        <span className="text-5xl font-black text-white tracking-tighter tabular-nums drop-shadow-[0_10px_15px_rgba(59,130,246,0.3)]">
+                                        <span className="text-5xl font-black text-white tracking-tighter tabular-nums drop-shadow-[0_10px_15px_rgba(230,0,35,0.3)]">
                                             {formatCurrency(totals.total)}
                                         </span>
                                         <span className="absolute -right-8 bottom-2 text-xs font-bold text-slate-600 italic">USD</span>
@@ -554,7 +554,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                     type="button"
                                     onClick={() => setStep(2)}
                                     disabled={!isFormValid}
-                                    className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:grayscale text-white py-6 rounded-[24px] font-black text-lg shadow-2xl shadow-blue-600/30 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group"
+                                    className="w-full bg-ueta-red hover:bg-red-700 disabled:opacity-30 disabled:grayscale text-white py-6 rounded-[24px] font-black text-lg shadow-2xl shadow-ueta-red/30 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group"
                                 >
                                     Revisar y Continuar
                                     <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -563,7 +563,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                     <div className="flex -space-x-2">
                                         {[1, 2, 3].map(i => (
                                             <div key={i} className="h-6 w-6 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center">
-                                                <div className="h-1 w-1 rounded-full bg-blue-500"></div>
+                                                <div className="h-1 w-1 rounded-full bg-ueta-red"></div>
                                             </div>
                                         ))}
                                     </div>
@@ -579,16 +579,16 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
             ) : (
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-500">
                     <div className="bg-slate-900 border border-slate-800 rounded-[48px] shadow-[0_40px_120px_rgba(0,0,0,0.7)] overflow-hidden">
-                        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-12 flex justify-between items-center relative overflow-hidden">
+                        <div className="bg-gradient-to-br from-ueta-red to-red-700 p-12 flex justify-between items-center relative overflow-hidden">
                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
                             <div className="relative z-10">
-                                <div className="flex items-center gap-3 text-blue-100/60 uppercase tracking-[0.4em] font-black text-[10px] mb-2">
-                                    <div className="h-1 w-8 bg-blue-100/30 rounded-full"></div>
+                                <div className="flex items-center gap-3 text-red-100/60 uppercase tracking-[0.4em] font-black text-[10px] mb-2">
+                                    <div className="h-1 w-8 bg-red-100/30 rounded-full"></div>
                                     Comprobante Fiscal
                                 </div>
                                 <h2 className="text-3xl font-black text-white leading-tight tracking-tighter">Vista Previa Final</h2>
-                                <p className="text-blue-100/70 font-medium text-sm mt-1">
-                                    Validación de estructura para <span className="text-white font-bold underline decoration-blue-300/30">{selectedCustomer?.name}</span>
+                                <p className="text-red-100/70 font-medium text-sm mt-1">
+                                    Validación de estructura para <span className="text-white font-bold underline decoration-red-300/30">{selectedCustomer?.name}</span>
                                 </p>
                             </div>
                             <div className="h-20 w-20 bg-white/10 backdrop-blur-3xl rounded-3xl flex items-center justify-center shadow-inner border border-white/20 relative z-10">
@@ -604,7 +604,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         <p className="text-white font-black text-2xl tracking-tight">{selectedCustomer?.name}</p>
                                         <div className="mt-3 flex flex-col gap-1">
                                             {selectedCustomer?.ruc && (
-                                                <p className="text-blue-400 font-mono text-sm border-l-2 border-blue-500/30 pl-3">
+                                                <p className="text-ueta-red font-mono text-sm border-l-2 border-ueta-red/30 pl-3">
                                                     RUC: {selectedCustomer.ruc}-{selectedCustomer.dv || '00'}
                                                 </p>
                                             )}
@@ -630,7 +630,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
 
                             <div>
                                 <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-[0.3em] mb-8 flex items-center gap-3 pl-1">
-                                    <Plus className="h-3 w-3 text-blue-500" />
+                                    <Plus className="h-3 w-3 text-ueta-red" />
                                     Detalle de Operación
                                 </h4>
                                 <div className="space-y-6">
@@ -652,14 +652,14 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                     )}
                                                 </div>
                                             </div>
-                                            <p className="text-white font-mono font-black text-lg tabular-nums border-b-2 border-blue-500/30 pb-1">{formatCurrency(item.total)}</p>
+                                            <p className="text-white font-mono font-black text-lg tabular-nums border-b-2 border-ueta-red/30 pb-1">{formatCurrency(item.total)}</p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
 
                             <div className="bg-slate-950 p-12 rounded-[40px] border border-slate-800 shadow-inner relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-[100px]"></div>
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-ueta-red/5 blur-[100px]"></div>
                                 <div className="flex flex-col sm:flex-row justify-between items-end gap-12 relative z-10">
                                     <div className="space-y-6">
                                         <div className="flex items-center gap-3 text-emerald-400 font-black text-[10px] uppercase bg-emerald-400/10 px-4 py-2 rounded-2xl border border-emerald-400/20 w-fit">
@@ -689,7 +689,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                             <span className="text-slate-700 text-3xl font-black italic">USD</span>
                                             <p className="text-7xl font-black text-white tracking-tighter tabular-nums drop-shadow-2xl">{formatCurrency(totals.total)}</p>
                                         </div>
-                                        <div className="h-1.5 w-full bg-blue-600 rounded-full mt-4 shadow-lg shadow-blue-600/20"></div>
+                                        <div className="h-1.5 w-full bg-ueta-red rounded-full mt-4 shadow-lg shadow-ueta-red/20"></div>
                                     </div>
                                 </div>
                             </div>
@@ -739,9 +739,9 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             <button
                                 onClick={handleSubmit}
                                 disabled={loading}
-                                className="flex-[1.5] px-12 py-5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-3xl shadow-[0_20px_50px_rgba(37,99,235,0.4)] transition-all flex items-center justify-center gap-4 active:scale-95 text-xl relative overflow-hidden group"
+                                className="flex-[1.5] px-12 py-5 bg-ueta-red hover:bg-red-700 text-white font-black rounded-3xl shadow-[0_20px_50px_rgba(230,0,35,0.4)] transition-all flex items-center justify-center gap-4 active:scale-95 text-xl relative overflow-hidden group"
                             >
-                                {loading && <div className="absolute inset-0 bg-blue-600/80 flex items-center justify-center z-10"><div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin"></div></div>}
+                                {loading && <div className="absolute inset-0 bg-ueta-red/80 flex items-center justify-center z-10"><div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin"></div></div>}
                                 <Save className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                                 EMITIR FACTURA LEGAL
                             </button>
