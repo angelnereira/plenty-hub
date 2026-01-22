@@ -578,7 +578,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                 </div >
             ) : (
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-500">
-                    <div className="bg-slate-900 border border-slate-800 rounded-[48px] shadow-[0_40px_120px_rgba(0,0,0,0.7)] overflow-hidden">
+                    <div className="card border rounded-[48px] shadow-[0_40px_120px_rgba(0,0,0,0.7)] overflow-hidden">
                         <div className="bg-gradient-to-br from-ueta-red to-red-700 p-12 flex justify-between items-center relative overflow-hidden">
                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
                             <div className="relative z-10">
@@ -596,7 +596,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
                         </div>
 
-                        <div className="p-12 sm:p-16 space-y-16 bg-slate-900/50 backdrop-blur-md relative">
+                        <div className="p-12 sm:p-16 space-y-16 bg-[var(--muted)] backdrop-blur-md relative">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 border-b border-slate-800/50 pb-12">
                                 <div className="space-y-6">
                                     <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-[0.3em] pl-1">Receptor</h4>
@@ -616,7 +616,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 <div className="sm:text-right space-y-6">
                                     <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-[0.3em] pr-1">Documento</h4>
                                     <div className="flex flex-col sm:items-end gap-2 text-sm">
-                                        <div className="bg-slate-950 border border-slate-800 p-3 rounded-2xl w-fit sm:ml-auto">
+                                        <div className="card border p-3 rounded-2xl w-fit sm:ml-auto">
                                             <p className="text-slate-500 font-bold uppercase text-[9px] mb-1">Carga Legal</p>
                                             <p className="text-white font-black font-mono text-lg">{invoiceNumber}</p>
                                         </div>
@@ -658,7 +658,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 </div>
                             </div>
 
-                            <div className="bg-slate-950 p-12 rounded-[40px] border border-slate-800 shadow-inner relative overflow-hidden">
+                            <div className="card p-12 rounded-[40px] border border-[var(--border)] shadow-inner relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-ueta-red/5 blur-[100px]"></div>
                                 <div className="flex flex-col sm:flex-row justify-between items-end gap-12 relative z-10">
                                     <div className="space-y-6">
@@ -669,7 +669,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         <p className="text-slate-500 text-xs max-w-sm leading-relaxed font-medium">
                                             Este comprobante cumple con las especificaciones técnicas de facturación electrónica. Al emitir, se generará el CUFE legal.
                                         </p>
-                                        <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-800/50 w-fit">
+                                        <div className="p-4 bg-[var(--muted)] rounded-2xl border border-[var(--border)] w-fit">
                                             <p className="text-[10px] text-slate-600 font-black uppercase mb-2">Desglose de Impuestos</p>
                                             <div className="flex items-center gap-6">
                                                 <div className="flex flex-col">
@@ -695,7 +695,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             </div>
                         </div>
 
-                        <div className="p-12 border-t border-slate-800 bg-slate-950/30 flex flex-col lg:flex-row gap-6">
+                        <div className="p-12 border-t border-[var(--border)] bg-[var(--muted)] flex flex-col lg:flex-row gap-6">
                             <button
                                 onClick={() => setStep(1)}
                                 className="flex-1 px-8 py-5 border-2 border-slate-800 hover:border-slate-700 text-slate-500 hover:text-white font-black rounded-3xl transition-all flex items-center justify-center gap-3 group active:scale-95"
@@ -748,9 +748,9 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                         </div>
                     </div>
 
-                    <div className="bg-slate-950/50 border border-slate-800 p-6 rounded-3xl flex items-center justify-between">
+                    <div className="card border p-6 rounded-3xl flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center">
+                            <div className="h-10 w-10 rounded-2xl card border border-[var(--border)] flex items-center justify-center">
                                 <AlertCircle className="h-5 w-5 text-slate-600" />
                             </div>
                             <p className="text-slate-500 text-xs font-medium max-w-sm">
