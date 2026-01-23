@@ -9,28 +9,28 @@ export default async function Home() {
 
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#020617] text-slate-200 selection:bg-blue-500/30">
+    <div className="flex min-h-screen flex-col bg-[var(--background)] text-[var(--foreground)] selection:bg-blue-500/30">
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto w-full border-b border-slate-800/50">
+      <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto w-full border-b border-[var(--border)]">
         <div className="flex items-center gap-2">
           <div className="bg-blue-600 p-1.5 rounded-lg">
             <LayoutDashboard className="h-6 w-6 text-white" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">Plenty <span className="text-blue-500">Hub</span></span>
+          <span className="text-xl font-bold tracking-tight text-[var(--foreground)]">Plenty <span className="text-blue-500">Hub</span></span>
         </div>
 
         <div className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-4">
               <div className="hidden md:flex flex-col items-end">
-                <span className="text-sm font-medium text-white">{user.name}</span>
-                <span className="text-xs text-slate-500 capitalize">{(user as any).role}</span>
+                <span className="text-sm font-medium text-[var(--foreground)]">{user.name}</span>
+                <span className="text-xs text-[var(--muted-foreground)] capitalize">{(user as any).role}</span>
               </div>
-              <div className="h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center border border-slate-700">
+              <div className="h-10 w-10 bg-[var(--muted)] rounded-full flex items-center justify-center border border-[var(--border)]">
                 <User className="h-5 w-5 text-blue-400" />
               </div>
               <form action={async () => { "use server"; await signOut(); }}>
-                <button className="p-2 hover:bg-red-500/10 text-slate-400 hover:text-red-500 rounded-lg transition-colors">
+                <button className="p-2 hover:bg-red-500/10 text-[var(--muted-foreground)] hover:text-red-500 rounded-lg transition-colors">
                   <LogOut className="h-5 w-5" />
                 </button>
               </form>
@@ -38,7 +38,7 @@ export default async function Home() {
           ) : (
             <Link
               href="/login"
-              className="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-full text-sm font-medium transition-all hover:ring-2 hover:ring-blue-500/50"
+              className="px-5 py-2 bg-[var(--muted)] hover:bg-[var(--muted)]/80 text-[var(--foreground)] rounded-full text-sm font-medium transition-all hover:ring-2 hover:ring-blue-500/50"
             >
               Iniciar Sesión
             </Link>
@@ -53,14 +53,14 @@ export default async function Home() {
           <span>v1.0 Ahora con Sincronización Offline</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 max-w-4xl leading-[1.1]">
+        <h1 className="text-5xl md:text-7xl font-extrabold text-[var(--foreground)] tracking-tight mb-6 max-w-4xl leading-[1.1]">
           Escale su empresa con <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
             Inteligencia Operativa
           </span>
         </h1>
 
-        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
+        <p className="text-[var(--muted-foreground)] text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
           La plataforma integral para empresas modernas en Panamá.
           Facturación avanzada, analítica en tiempo real y seguridad de grado bancario en un solo Hub.
         </p>
@@ -72,7 +72,7 @@ export default async function Home() {
           >
             {user ? "Entrar al Dashboard" : "Comenzar Ahora"}
           </Link>
-          <button className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold text-lg transition-all">
+          <button className="px-8 py-4 bg-[var(--muted)] hover:bg-[var(--muted)]/80 text-[var(--foreground)] rounded-xl font-bold text-lg transition-all">
             Ver Demo
           </button>
         </div>
@@ -96,12 +96,12 @@ export default async function Home() {
               desc: "Control granular de accesos y cifrado de datos sensibles (PII)."
             }
           ].map((feature, i) => (
-            <div key={i} className="group p-8 bg-slate-900/50 border border-slate-800 rounded-2xl hover:border-blue-500/50 transition-all hover:bg-slate-900">
-              <div className="bg-slate-800 p-3 rounded-xl w-fit mb-6 group-hover:bg-blue-600 transition-colors">
+            <div key={i} className="group p-8 bg-[var(--card)] border border-[var(--border)] rounded-2xl hover:border-blue-500/50 transition-all hover:bg-[var(--card)]/80">
+              <div className="bg-[var(--muted)] p-3 rounded-xl w-fit mb-6 group-hover:bg-blue-600 transition-colors">
                 <feature.icon className="h-6 w-6 text-blue-400 group-hover:text-white" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3 text-left">{feature.title}</h3>
-              <p className="text-slate-400 text-left leading-relaxed">
+              <h3 className="text-xl font-bold text-[var(--foreground)] mb-3 text-left">{feature.title}</h3>
+              <p className="text-[var(--muted-foreground)] text-left leading-relaxed">
                 {feature.desc}
               </p>
             </div>
@@ -110,18 +110,18 @@ export default async function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/50 px-8 py-12 max-w-7xl mx-auto w-full">
+      <footer className="border-t border-[var(--border)] px-8 py-12 max-w-7xl mx-auto w-full">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2 grayscale opacity-50">
             <LayoutDashboard className="h-5 w-5" />
             <span className="font-bold">Plenty Hub</span>
           </div>
-          <p className="text-slate-500 text-sm">
+          <p className="text-[var(--muted-foreground)] text-sm">
             © 2026 Plenty Hub . Diseñado para la excelencia empresarial.
           </p>
-          <div className="flex gap-6 text-slate-400 text-sm">
-            <a href="#" className="hover:text-white transition-colors">Privacidad</a>
-            <a href="#" className="hover:text-white transition-colors">Términos</a>
+          <div className="flex gap-6 text-[var(--muted-foreground)] text-sm">
+            <a href="#" className="hover:text-[var(--foreground)] transition-colors">Privacidad</a>
+            <a href="#" className="hover:text-[var(--foreground)] transition-colors">Términos</a>
           </div>
         </div>
       </footer>
