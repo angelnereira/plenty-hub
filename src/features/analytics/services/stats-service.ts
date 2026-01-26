@@ -32,9 +32,9 @@ export class StatsService {
             .where(eq(products.tenantId, tId));
 
         return {
-            totalRevenue: totalSalesRow[0]?.total || 0,
-            customerCount: customerCountRow[0]?.count || 0,
-            productCount: productCountRow[0]?.count || 0,
+            totalRevenue: Number(totalSalesRow[0]?.total || 0),
+            customerCount: Number(customerCountRow[0]?.count || 0),
+            productCount: Number(productCountRow[0]?.count || 0),
         };
     }
 
@@ -47,22 +47,25 @@ export class StatsService {
 
         const results = await db
             .select({
-                date: sql<string>`DATE(${invoices.issuedAt})`,
+                date: sql<string>`TO_CHAR(${invoices.issuedAt}, 'YYYY-MM-DD')`,
                 total: sql<number>`sum(${invoices.total})`,
             })
             .from(invoices)
             .where(and(eq(invoices.tenantId, tId), gte(invoices.issuedAt, startDate)))
-            .groupBy(sql`DATE(${invoices.issuedAt})`)
-            .orderBy(sql`DATE(${invoices.issuedAt})`);
+            .groupBy(sql`TO_CHAR(${invoices.issuedAt}, 'YYYY-MM-DD')`)
+            .orderBy(sql`TO_CHAR(${invoices.issuedAt}, 'YYYY-MM-DD')`);
 
-        return results;
+        return results.map(r => ({
+            ...r,
+            total: Number(r.total || 0)
+        }));
     }
 
     async getTopCustomers(tenantId?: string, limit = 5) {
         const tId = await this.ensureTenant(tenantId);
         if (!tId) return [];
 
-        return db
+        const res = await db
             .select({
                 name: customers.name,
                 totalSpent: sql<number>`sum(${invoices.total})`,
@@ -73,5 +76,10 @@ export class StatsService {
             .groupBy(customers.name)
             .orderBy(sql`sum(${invoices.total}) desc`)
             .limit(limit);
+
+        return res.map(r => ({
+            ...r,
+            totalSpent: Number(r.totalSpent || 0)
+        }));
     }
 }
