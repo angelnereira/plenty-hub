@@ -420,7 +420,7 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                     </select>
                                                     <textarea
                                                         rows={1}
-                                                        placeholder="Añadir detalle adicional..."
+                                                        placeholder="Escribe el nombre del producto o servicio"
                                                         value={item.description}
                                                         onChange={(e) => updateItem(index, 'description', e.target.value)}
                                                         onInput={(e) => {
@@ -428,8 +428,8 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                             target.style.height = 'auto';
                                                             target.style.height = `${target.scrollHeight}px`;
                                                         }}
-                                                        style={{ minHeight: '38px' }}
-                                                        className="w-full bg-transparent hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg p-2 text-xs font-medium text-[var(--muted-foreground)] focus:text-[var(--foreground)] transition-all resize-none outline-none overflow-hidden"
+                                                        style={{ minHeight: '42px' }}
+                                                        className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg p-3 text-sm font-medium text-white placeholder:text-gray-500 transition-all resize-none outline-none overflow-hidden leading-relaxed"
                                                     />
                                                 </div>
 
