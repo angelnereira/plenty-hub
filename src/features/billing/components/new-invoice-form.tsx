@@ -356,7 +356,8 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                             )}
                         </section>
 
-                        <section className="card border border-[var(--border)] p-1 rounded-[24px] shadow-sm bg-[var(--card)] overflow-hidden">
+                        <section className="card border border-[var(--border)] rounded-[24px] shadow-sm bg-[var(--card)] overflow-hidden">
+                            {/* Header */}
                             <div className="p-6 border-b border-[var(--border)]/50 bg-[var(--muted)]/20 flex justify-between items-center">
                                 <div className="flex items-center gap-3">
                                     <div className="h-10 w-10 bg-ueta-red/10 rounded-xl flex items-center justify-center">
@@ -372,135 +373,251 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 </div>
                             </div>
 
-                            <div className="w-full">
-                                {/* TABLE HEADER - Rigid Grid */}
-                                <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-4 px-6 py-3 bg-[var(--muted)]/30 border-y border-[var(--border)] items-center text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em]">
-                                    <div className="pl-2">Descripción / Producto</div>
-                                    <div className="text-right">Cantidad</div>
-                                    <div className="text-right">Precio Unit.</div>
-                                    <div className="text-right">Impuesto</div>
-                                    <div className="text-right pr-2">Total</div>
-                                    <div></div>
-                                </div>
+                            {/* Desktop Table View */}
+                            <div className="hidden lg:block overflow-x-auto">
+                                <table className="w-full border-collapse">
+                                    <thead>
+                                        <tr className="bg-[var(--muted)]/30 border-b border-[var(--border)]">
+                                            <th className="text-left p-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider" style={{ width: '40%' }}>
+                                                Descripción / Producto
+                                            </th>
+                                            <th className="text-center p-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider" style={{ width: '12%' }}>
+                                                Cantidad
+                                            </th>
+                                            <th className="text-right p-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider" style={{ width: '15%' }}>
+                                                Precio Unit.
+                                            </th>
+                                            <th className="text-right p-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider" style={{ width: '15%' }}>
+                                                Impuesto
+                                            </th>
+                                            <th className="text-right p-4 text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-wider" style={{ width: '15%' }}>
+                                                Total
+                                            </th>
+                                            <th className="p-4" style={{ width: '3%' }}></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-[var(--border)]/50">
+                                        {items.map((item, index) => (
+                                            <tr key={index} className="hover:bg-[var(--muted)]/20 transition-all">
+                                                {/* DESCRIPCIÓN */}
+                                                <td className="p-4 align-top">
+                                                    <div className="space-y-2">
+                                                        {products.length > 0 && (
+                                                            <select
+                                                                value={item.productId || ''}
+                                                                onChange={(e) => {
+                                                                    const pId = e.target.value;
+                                                                    if (pId) {
+                                                                        const p = products.find((prod: any) => prod.id === pId);
+                                                                        if (p) {
+                                                                            const newItems = [...items];
+                                                                            newItems[index] = {
+                                                                                ...newItems[index],
+                                                                                productId: p.id,
+                                                                                description: p.name,
+                                                                                unitPrice: p.price,
+                                                                                total: p.price * newItems[index].quantity
+                                                                            };
+                                                                            setItems(newItems);
+                                                                        }
+                                                                    } else {
+                                                                        updateItem(index, 'productId', null);
+                                                                    }
+                                                                }}
+                                                                className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm font-medium text-white cursor-pointer outline-none focus:ring-2 focus:ring-red-500/20"
+                                                            >
+                                                                <option value="">Seleccionar producto del catálogo...</option>
+                                                                {products.map((p: any) => (
+                                                                    <option key={p.id} value={p.id}>{p.name} - {formatCurrency(p.price)}</option>
+                                                                ))}
+                                                            </select>
+                                                        )}
+                                                        <input
+                                                            type="text"
+                                                            value={item.description}
+                                                            onChange={(e) => updateItem(index, 'description', e.target.value)}
+                                                            placeholder="Escriba la descripción del producto o servicio..."
+                                                            className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm font-medium text-white placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-red-500/20"
+                                                        />
+                                                    </div>
+                                                </td>
 
-                                <div className="divide-y divide-[var(--border)]/50">
-                                    {items.map((item, index) => (
-                                        <div key={index} className="group/row hover:bg-[var(--muted)]/20 transition-all relative">
-                                            <div className="grid grid-cols-[1.5fr_100px_140px_140px_120px_48px] gap-4 px-6 py-4 items-start">
-
-                                                {/* PRODUCT & DESCRIPTION */}
-                                                <div className="flex flex-col gap-2">
-                                                    <select
-                                                        value={item.productId || ''}
-                                                        onChange={(e) => {
-                                                            const pId = e.target.value;
-                                                            if (pId) {
-                                                                const p = products.find((prod: any) => prod.id === pId);
-                                                                if (p) {
-                                                                    const newItems = [...items];
-                                                                    newItems[index] = {
-                                                                        ...newItems[index],
-                                                                        productId: p.id,
-                                                                        description: p.name,
-                                                                        unitPrice: p.price,
-                                                                        total: p.price * newItems[index].quantity
-                                                                    };
-                                                                    setItems(newItems);
-                                                                }
-                                                            } else {
-                                                                updateItem(index, 'productId', null);
-                                                            }
-                                                        }}
-                                                        className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg p-2 text-sm font-bold text-[var(--foreground)] transition-all cursor-pointer outline-none placeholder:text-gray-600 appearance-none"
-                                                    >
-                                                        <option value="">Seleccionar Producto...</option>
-                                                        {products.map((p: any) => (
-                                                            <option key={p.id} value={p.id}>{p.name}</option>
-                                                        ))}
-                                                    </select>
-                                                    <textarea
-                                                        rows={1}
-                                                        placeholder="Escribe el nombre del producto o servicio"
-                                                        value={item.description}
-                                                        onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                        onInput={(e) => {
-                                                            const target = e.target as HTMLTextAreaElement;
-                                                            target.style.height = 'auto';
-                                                            target.style.height = `${target.scrollHeight}px`;
-                                                        }}
-                                                        style={{ minHeight: '42px' }}
-                                                        className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg p-3 text-sm font-medium text-white placeholder:text-gray-500 transition-all resize-none outline-none overflow-hidden leading-relaxed"
-                                                    />
-                                                </div>
-
-                                                {/* QUANTITY */}
-                                                <div className="flex items-start justify-end pt-1">
+                                                {/* CANTIDAD */}
+                                                <td className="p-4 align-top">
                                                     <input
                                                         type="number"
                                                         min="1"
                                                         value={item.quantity}
                                                         onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                        className="w-full max-w-[80px] bg-[#1A1D24] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg py-2 px-3 text-right text-sm font-bold text-white transition-all outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none tabular-nums"
+                                                        className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-center text-sm font-bold text-white outline-none focus:ring-2 focus:ring-red-500/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                     />
-                                                </div>
+                                                </td>
 
-                                                {/* UNIT PRICE */}
-                                                <div className="flex items-start justify-end pt-1 relative group/price">
-                                                    <span className="absolute left-3 top-3 text-gray-500 text-xs font-bold pointer-events-none">$</span>
-                                                    <input
-                                                        type="number"
-                                                        step="0.01"
-                                                        value={(item.unitPrice / 100).toFixed(2)}
-                                                        onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                        className="w-full bg-[#1A1D24] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg py-2 pl-6 pr-3 text-right text-sm font-bold text-white transition-all outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none tabular-nums"
-                                                    />
-                                                </div>
+                                                {/* PRECIO UNITARIO */}
+                                                <td className="p-4 align-top">
+                                                    <div className="relative">
+                                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm font-medium">$</span>
+                                                        <input
+                                                            type="number"
+                                                            step="0.01"
+                                                            min="0"
+                                                            value={(item.unitPrice / 100).toFixed(2)}
+                                                            onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
+                                                            className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white outline-none focus:ring-2 focus:ring-red-500/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                        />
+                                                    </div>
+                                                </td>
 
-                                                {/* TAX */}
-                                                <div className="flex items-start justify-end pt-1">
+                                                {/* IMPUESTO */}
+                                                <td className="p-4 align-top">
                                                     <select
                                                         value={item.taxCode}
                                                         onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                        className="w-full bg-[#1A1D24] hover:bg-[#252830] focus:bg-[#0F1115] border border-transparent focus:border-indigo-500 rounded-lg py-2 px-2 text-xs font-bold text-right text-gray-300 transition-all appearance-none cursor-pointer outline-none"
-                                                        style={{ textAlignLast: 'right' }}
+                                                        className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm font-medium text-white cursor-pointer outline-none focus:ring-2 focus:ring-red-500/20"
                                                     >
                                                         <option value="00">Exento (0%)</option>
                                                         <option value="01">ITBMS (7%)</option>
                                                         <option value="02">Alcohol (10%)</option>
                                                         <option value="03">Tabaco (15%)</option>
                                                     </select>
-                                                </div>
+                                                </td>
 
-                                                {/* TOTAL LINE */}
-                                                <div className="flex flex-col justify-start items-end pt-3 pr-2">
-                                                    <span className="text-sm font-black text-emerald-400 tabular-nums tracking-tight">
+                                                {/* TOTAL */}
+                                                <td className="p-4 align-top text-right">
+                                                    <span className="text-lg font-black text-emerald-400 tabular-nums">
                                                         {formatCurrency(item.total)}
                                                     </span>
-                                                </div>
+                                                </td>
 
-                                                {/* ACTIONS */}
-                                                <div className="flex items-center justify-center pt-2">
+                                                {/* ACCIONES */}
+                                                <td className="p-4 align-top">
                                                     <button
                                                         type="button"
                                                         onClick={() => removeItem(index)}
                                                         disabled={items.length === 1}
-                                                        className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-0 disabled:cursor-not-allowed group/trash"
-                                                        title="Eliminar"
+                                                        className="p-2 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                                                        title="Eliminar ítem"
                                                     >
-                                                        <Trash2 className="h-4 w-4 group-hover/trash:scale-110 transition-transform" />
+                                                        <Trash2 className="h-4 w-4" />
                                                     </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Mobile Card View */}
+                            <div className="lg:hidden p-4 space-y-4">
+                                {items.map((item, index) => (
+                                    <div key={index} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 space-y-4">
+                                        {/* Descripción */}
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Producto / Servicio</label>
+                                            {products.length > 0 && (
+                                                <select
+                                                    value={item.productId || ''}
+                                                    onChange={(e) => {
+                                                        const pId = e.target.value;
+                                                        if (pId) {
+                                                            const p = products.find((prod: any) => prod.id === pId);
+                                                            if (p) {
+                                                                const newItems = [...items];
+                                                                newItems[index] = {
+                                                                    ...newItems[index],
+                                                                    productId: p.id,
+                                                                    description: p.name,
+                                                                    unitPrice: p.price,
+                                                                    total: p.price * newItems[index].quantity
+                                                                };
+                                                                setItems(newItems);
+                                                            }
+                                                        } else {
+                                                            updateItem(index, 'productId', null);
+                                                        }
+                                                    }}
+                                                    className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm text-white"
+                                                >
+                                                    <option value="">Seleccionar producto...</option>
+                                                    {products.map((p: any) => (
+                                                        <option key={p.id} value={p.id}>{p.name}</option>
+                                                    ))}
+                                                </select>
+                                            )}
+                                            <input
+                                                type="text"
+                                                value={item.description}
+                                                onChange={(e) => updateItem(index, 'description', e.target.value)}
+                                                placeholder="Descripción del producto o servicio..."
+                                                className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm text-white placeholder:text-zinc-500"
+                                            />
+                                        </div>
+
+                                        {/* Grid de campos numéricos */}
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-zinc-400 uppercase">Cantidad</label>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    value={item.quantity}
+                                                    onChange={(e) => updateItem(index, 'quantity', e.target.value)}
+                                                    className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-center text-sm font-bold text-white"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-zinc-400 uppercase">Precio Unit.</label>
+                                                <div className="relative">
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
+                                                    <input
+                                                        type="number"
+                                                        step="0.01"
+                                                        value={(item.unitPrice / 100).toFixed(2)}
+                                                        onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
+                                                        className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-zinc-400 uppercase">Impuesto</label>
+                                                <select
+                                                    value={item.taxCode}
+                                                    onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
+                                                    className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm text-white"
+                                                >
+                                                    <option value="00">0%</option>
+                                                    <option value="01">7%</option>
+                                                    <option value="02">10%</option>
+                                                    <option value="03">15%</option>
+                                                </select>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-zinc-400 uppercase">Total</label>
+                                                <div className="h-11 bg-zinc-800 border border-zinc-700 rounded-lg px-3 flex items-center justify-end">
+                                                    <span className="text-lg font-bold text-emerald-400">{formatCurrency(item.total)}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
+
+                                        {/* Eliminar */}
+                                        <button
+                                            type="button"
+                                            onClick={() => removeItem(index)}
+                                            disabled={items.length === 1}
+                                            className="w-full h-10 border border-zinc-700 text-zinc-400 hover:text-red-500 hover:border-red-500/50 hover:bg-red-500/10 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all disabled:opacity-30"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                            Eliminar ítem
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
 
-                            {/* FOOTER ACTIONS */}
-                            <div className="p-6 bg-[var(--muted)]/30 border-t border-[var(--border)] flex justify-between items-center">
-                                <div className="text-[10px] text-[var(--muted-foreground)] pl-2">
+                            {/* Footer con botón añadir */}
+                            <div className="p-6 bg-[var(--muted)]/30 border-t border-[var(--border)] flex flex-col sm:flex-row gap-4 justify-between items-center">
+                                <p className="text-[10px] text-[var(--muted-foreground)]">
                                     Todos los precios están en <strong>USD</strong>
-                                </div>
+                                </p>
                                 <button
                                     type="button"
                                     onClick={addItem}
