@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 interface KPICardProps {
     title: string;
     value: string | number;
-    icon: LucideIcon;
+    icon: React.ReactNode;
     description?: string;
     trend?: {
         value: number;
@@ -16,7 +16,7 @@ interface KPICardProps {
     };
 }
 
-export const KPICard = ({ title, value, icon: Icon, description, trend }: KPICardProps) => {
+export const KPICard = ({ title, value, icon, description, trend }: KPICardProps) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -32,7 +32,8 @@ export const KPICard = ({ title, value, icon: Icon, description, trend }: KPICar
                         {title}
                     </CardTitle>
                     <div className="p-2 rounded-lg bg-ueta-red/10">
-                        <Icon className="h-4 w-4 text-ueta-red" />
+                        {/* Render the icon directly as it is now a ReactNode */}
+                        {icon}
                     </div>
                 </CardHeader>
                 <CardContent className="relative">

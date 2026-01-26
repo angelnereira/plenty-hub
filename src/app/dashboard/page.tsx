@@ -53,18 +53,18 @@ export default async function DashboardPage() {
                 <KPICard
                     title="Ingresos Totales"
                     value={formatCurrency(kpis.totalRevenue)}
-                    icon={DollarSign}
+                    icon={<DollarSign className="h-4 w-4 text-ueta-red" />}
                     trend={{ value: 12, isUp: true }}
                 />
                 <KPICard
                     title="Clientes Activos"
                     value={kpis.customerCount}
-                    icon={Users}
+                    icon={<Users className="h-4 w-4 text-ueta-red" />}
                 />
                 <KPICard
                     title="Productos"
                     value={kpis.productCount}
-                    icon={Package}
+                    icon={<Package className="h-4 w-4 text-ueta-red" />}
                 />
             </div>
 
