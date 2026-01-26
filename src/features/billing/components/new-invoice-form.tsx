@@ -409,44 +409,75 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                     />
                                                 </td>
 
-                                                {/* CANTIDAD */}
+                                                {/* CANTIDAD - Number Stepper */}
                                                 <td className="p-4 align-top">
-                                                    <input
-                                                        type="number"
-                                                        min="1"
-                                                        value={item.quantity}
-                                                        onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                        className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-center text-sm font-bold text-white outline-none focus:ring-2 focus:ring-red-500/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                                    />
+                                                    <div className="flex items-center justify-center gap-1">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => updateItem(index, 'quantity', Math.max(1, item.quantity - 1))}
+                                                            className="h-10 w-10 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-l-lg text-white font-bold transition-all active:scale-95"
+                                                        >
+                                                            −
+                                                        </button>
+                                                        <input
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            value={item.quantity}
+                                                            onChange={(e) => {
+                                                                const val = parseInt(e.target.value) || 1;
+                                                                updateItem(index, 'quantity', Math.max(1, val));
+                                                            }}
+                                                            className="h-10 w-14 bg-zinc-900 border-y border-zinc-700 text-center text-sm font-bold text-white outline-none focus:bg-zinc-800"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => updateItem(index, 'quantity', item.quantity + 1)}
+                                                            className="h-10 w-10 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-r-lg text-white font-bold transition-all active:scale-95"
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
                                                 </td>
 
-                                                {/* PRECIO UNITARIO */}
+                                                {/* PRECIO UNITARIO - Currency Input */}
                                                 <td className="p-4 align-top">
                                                     <div className="relative">
                                                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm font-medium">$</span>
                                                         <input
-                                                            type="number"
-                                                            step="0.01"
-                                                            min="0"
-                                                            value={(item.unitPrice / 100).toFixed(2)}
-                                                            onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
-                                                            className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white outline-none focus:ring-2 focus:ring-red-500/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                            type="text"
+                                                            inputMode="decimal"
+                                                            value={(item.unitPrice / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            onChange={(e) => {
+                                                                const rawValue = e.target.value.replace(/[^0-9.]/g, '');
+                                                                updateItem(index, 'unitPriceUI', rawValue);
+                                                            }}
+                                                            className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white outline-none focus:ring-2 focus:ring-red-500/20"
                                                         />
                                                     </div>
                                                 </td>
 
-                                                {/* IMPUESTO */}
+                                                {/* IMPUESTO - Percentage Presets */}
                                                 <td className="p-4 align-top">
-                                                    <select
-                                                        value={item.taxCode}
-                                                        onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                        className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm font-medium text-white cursor-pointer outline-none focus:ring-2 focus:ring-red-500/20"
-                                                    >
-                                                        <option value="00">Exento (0%)</option>
-                                                        <option value="01">ITBMS (7%)</option>
-                                                        <option value="02">Alcohol (10%)</option>
-                                                        <option value="03">Tabaco (15%)</option>
-                                                    </select>
+                                                    <div className="flex items-center gap-1">
+                                                        {[
+                                                            { code: '00', label: '0%' },
+                                                            { code: '01', label: '7%' },
+                                                            { code: '02', label: '10%' },
+                                                            { code: '03', label: '15%' },
+                                                        ].map((tax) => (
+                                                            <button
+                                                                key={tax.code}
+                                                                type="button"
+                                                                onClick={() => updateItem(index, 'taxCode', tax.code)}
+                                                                className={`h-10 px-2 rounded-lg text-xs font-bold transition-all ${item.taxCode === tax.code
+                                                                    ? 'bg-red-500 text-white'
+                                                                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white border border-zinc-700'
+                                                                    }`}
+                                                            >
+                                                                {tax.label}
+                                                            </button>
+                                                        ))}
+                                                    </div>
                                                 </td>
 
                                                 {/* TOTAL */}
@@ -491,43 +522,82 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                         </div>
 
                                         {/* Grid de campos numéricos */}
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-3">
+                                            {/* Cantidad - Stepper */}
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-zinc-400 uppercase">Cantidad</label>
-                                                <input
-                                                    type="number"
-                                                    min="1"
-                                                    value={item.quantity}
-                                                    onChange={(e) => updateItem(index, 'quantity', e.target.value)}
-                                                    className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-center text-sm font-bold text-white"
-                                                />
+                                                <div className="flex items-center gap-1">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => updateItem(index, 'quantity', Math.max(1, item.quantity - 1))}
+                                                        className="h-11 w-12 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-l-lg text-white font-bold text-lg"
+                                                    >
+                                                        −
+                                                    </button>
+                                                    <input
+                                                        type="text"
+                                                        inputMode="numeric"
+                                                        value={item.quantity}
+                                                        onChange={(e) => {
+                                                            const val = parseInt(e.target.value) || 1;
+                                                            updateItem(index, 'quantity', Math.max(1, val));
+                                                        }}
+                                                        className="h-11 flex-1 bg-zinc-900 border-y border-zinc-700 text-center text-sm font-bold text-white outline-none"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => updateItem(index, 'quantity', item.quantity + 1)}
+                                                        className="h-11 w-12 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-r-lg text-white font-bold text-lg"
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
                                             </div>
+
+                                            {/* Precio - Currency Input */}
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-zinc-400 uppercase">Precio Unit.</label>
                                                 <div className="relative">
                                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
                                                     <input
-                                                        type="number"
-                                                        step="0.01"
-                                                        value={(item.unitPrice / 100).toFixed(2)}
-                                                        onChange={(e) => updateItem(index, 'unitPriceUI', e.target.value)}
+                                                        type="text"
+                                                        inputMode="decimal"
+                                                        value={(item.unitPrice / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        onChange={(e) => {
+                                                            const rawValue = e.target.value.replace(/[^0-9.]/g, '');
+                                                            updateItem(index, 'unitPriceUI', rawValue);
+                                                        }}
                                                         className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white"
                                                     />
                                                 </div>
                                             </div>
+
+                                            {/* Impuesto - Presets */}
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-zinc-400 uppercase">Impuesto</label>
-                                                <select
-                                                    value={item.taxCode}
-                                                    onChange={(e) => updateItem(index, 'taxCode', e.target.value)}
-                                                    className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm text-white"
-                                                >
-                                                    <option value="00">0%</option>
-                                                    <option value="01">7%</option>
-                                                    <option value="02">10%</option>
-                                                    <option value="03">15%</option>
-                                                </select>
+                                                <div className="flex items-center gap-1">
+                                                    {[
+                                                        { code: '00', label: '0%' },
+                                                        { code: '01', label: '7%' },
+                                                        { code: '02', label: '10%' },
+                                                        { code: '03', label: '15%' },
+                                                    ].map((tax) => (
+                                                        <button
+                                                            key={tax.code}
+                                                            type="button"
+                                                            onClick={() => updateItem(index, 'taxCode', tax.code)}
+                                                            className={`h-11 flex-1 rounded-lg text-sm font-bold transition-all ${item.taxCode === tax.code
+                                                                    ? 'bg-red-500 text-white'
+                                                                    : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                                                }`}
+                                                        >
+                                                            {tax.label}
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
+
+                                            {/* Total */}
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-zinc-400 uppercase">Total</label>
                                                 <div className="h-11 bg-zinc-800 border border-zinc-700 rounded-lg px-3 flex items-center justify-end">
