@@ -399,47 +399,14 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                     <tbody className="divide-y divide-[var(--border)]/50">
                                         {items.map((item, index) => (
                                             <tr key={index} className="hover:bg-[var(--muted)]/20 transition-all">
-                                                {/* DESCRIPCIÓN */}
                                                 <td className="p-4 align-top">
-                                                    <div className="space-y-2">
-                                                        {products.length > 0 && (
-                                                            <select
-                                                                value={item.productId || ''}
-                                                                onChange={(e) => {
-                                                                    const pId = e.target.value;
-                                                                    if (pId) {
-                                                                        const p = products.find((prod: any) => prod.id === pId);
-                                                                        if (p) {
-                                                                            const newItems = [...items];
-                                                                            newItems[index] = {
-                                                                                ...newItems[index],
-                                                                                productId: p.id,
-                                                                                description: p.name,
-                                                                                unitPrice: p.price,
-                                                                                total: p.price * newItems[index].quantity
-                                                                            };
-                                                                            setItems(newItems);
-                                                                        }
-                                                                    } else {
-                                                                        updateItem(index, 'productId', null);
-                                                                    }
-                                                                }}
-                                                                className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm font-medium text-white cursor-pointer outline-none focus:ring-2 focus:ring-red-500/20"
-                                                            >
-                                                                <option value="">Seleccionar producto del catálogo...</option>
-                                                                {products.map((p: any) => (
-                                                                    <option key={p.id} value={p.id}>{p.name} - {formatCurrency(p.price)}</option>
-                                                                ))}
-                                                            </select>
-                                                        )}
-                                                        <input
-                                                            type="text"
-                                                            value={item.description}
-                                                            onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                            placeholder="Escriba la descripción del producto o servicio..."
-                                                            className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm font-medium text-white placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-red-500/20"
-                                                        />
-                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={item.description}
+                                                        onChange={(e) => updateItem(index, 'description', e.target.value)}
+                                                        placeholder="Escriba el nombre del producto o servicio..."
+                                                        className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm font-medium text-white placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-red-500/20"
+                                                    />
                                                 </td>
 
                                                 {/* CANTIDAD */}
@@ -512,43 +479,13 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                 {items.map((item, index) => (
                                     <div key={index} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 space-y-4">
                                         {/* Descripción */}
-                                        <div className="space-y-2">
+                                        <div className="space-y-1">
                                             <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Producto / Servicio</label>
-                                            {products.length > 0 && (
-                                                <select
-                                                    value={item.productId || ''}
-                                                    onChange={(e) => {
-                                                        const pId = e.target.value;
-                                                        if (pId) {
-                                                            const p = products.find((prod: any) => prod.id === pId);
-                                                            if (p) {
-                                                                const newItems = [...items];
-                                                                newItems[index] = {
-                                                                    ...newItems[index],
-                                                                    productId: p.id,
-                                                                    description: p.name,
-                                                                    unitPrice: p.price,
-                                                                    total: p.price * newItems[index].quantity
-                                                                };
-                                                                setItems(newItems);
-                                                            }
-                                                        } else {
-                                                            updateItem(index, 'productId', null);
-                                                        }
-                                                    }}
-                                                    className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm text-white"
-                                                >
-                                                    <option value="">Seleccionar producto...</option>
-                                                    {products.map((p: any) => (
-                                                        <option key={p.id} value={p.id}>{p.name}</option>
-                                                    ))}
-                                                </select>
-                                            )}
                                             <input
                                                 type="text"
                                                 value={item.description}
                                                 onChange={(e) => updateItem(index, 'description', e.target.value)}
-                                                placeholder="Descripción del producto o servicio..."
+                                                placeholder="Escriba el nombre del producto o servicio..."
                                                 className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg px-3 text-sm text-white placeholder:text-zinc-500"
                                             />
                                         </div>
