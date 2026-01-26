@@ -18,11 +18,20 @@ export default async function DashboardPage() {
     const tenantId = (session?.user as any)?.tenantId;
     const statsService = new StatsService();
 
-    const [kpis, salesTrend, topCustomers] = await Promise.all([
-        statsService.getDashboardKPIs(tenantId),
-        statsService.getSalesTrend(tenantId),
-        statsService.getTopCustomers(tenantId)
-    ]);
+    let kpis = { totalRevenue: 0, customerCount: 0, productCount: 0 };
+    let salesTrend = [];
+    let topCustomers: any[] = []; // Explicit any[] to avoid type issues with fallback
+
+    try {
+        [kpis, salesTrend, topCustomers] = await Promise.all([
+            statsService.getDashboardKPIs(tenantId),
+            statsService.getSalesTrend(tenantId),
+            statsService.getTopCustomers(tenantId)
+        ]) as [any, any, any]; // Robust casting
+    } catch (error) {
+        console.error("Failed to load dashboard stats:", error);
+        // Fallback values are already set
+    }
 
     return (
         <div className="p-4 md:p-8 max-w-7xl mx-auto animate-fade-in">
