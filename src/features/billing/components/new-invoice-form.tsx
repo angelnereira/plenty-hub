@@ -208,63 +208,55 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8 items-start">
-                <div className="flex-1 w-full space-y-8 min-w-0">
-                    <section className="card border p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-ueta-red/5 blur-[80px] group-hover:bg-ueta-red/10 transition-all"></div>
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-800/50 pb-6">
-                            <div className="flex items-center gap-3">
-                                <div className="h-10 w-10 bg-ueta-red/10 rounded-xl flex items-center justify-center">
-                                    <UserIcon className="h-5 w-5 text-ueta-red" />
-                                </div>
-                                <h3 className="text-lg font-bold text-white uppercase tracking-wider text-[10px]">Información Fiscal del Cliente</h3>
+                <div className="flex-1 w-full space-y-4 min-w-0">
+                    {/* Sección Cliente - Compacta */}
+                    <section className="card border p-4 rounded-2xl shadow-lg">
+                        <div className="flex flex-wrap items-center gap-3 mb-3">
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                <UserIcon className="h-4 w-4 text-ueta-red" />
+                                Cliente
+                            </span>
+                            <div className="flex bg-[var(--muted)] p-1 rounded-xl border border-[var(--border)]">
+                                {[
+                                    { mode: 'anonymous', label: 'Consumidor Final' },
+                                    { mode: 'existing', label: 'Seleccionar' },
+                                    { mode: 'manual', label: 'Nuevo' }
+                                ].map((tab) => (
+                                    <button
+                                        key={tab.mode}
+                                        type="button"
+                                        onClick={() => setCustomerMode(tab.mode as any)}
+                                        className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${customerMode === tab.mode
+                                                ? 'bg-ueta-red text-white shadow-md'
+                                                : 'text-slate-500 hover:text-white'
+                                            }`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
                             </div>
-                            <div className="flex bg-[var(--muted)] p-1.5 rounded-[22px] border border-[var(--border)] shadow-inner relative group/nav">
-                                <div
-                                    className="absolute h-[calc(100%-12px)] top-1.5 transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-ueta-red rounded-[16px] shadow-[0_8px_20px_rgba(230,0,35,0.3)]"
-                                    style={{
-                                        left: customerMode === 'anonymous' ? '6px' : customerMode === 'existing' ? 'calc(33.33% + 4px)' : 'calc(66.66% + 2px)',
-                                        width: 'calc(33.33% - 8px)'
-                                    }}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setCustomerMode('anonymous')}
-                                    className={`relative z-10 flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${customerMode === 'anonymous' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
-                                >
-                                    Consumidor Final
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setCustomerMode('existing')}
-                                    className={`relative z-10 flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${customerMode === 'existing' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
-                                >
-                                    Lista Clientes
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setCustomerMode('manual')}
-                                    className={`relative z-10 flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${customerMode === 'manual' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
-                                >
-                                    Nuevo Cliente
-                                </button>
-                            </div>
+                            {/* Mostrar cliente seleccionado inline */}
+                            {customerMode === 'anonymous' && (
+                                <span className="text-sm text-white font-bold flex items-center gap-2 ml-auto">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                                    Receptor: Consumidor Final
+                                </span>
+                            )}
+                            {customerMode === 'existing' && customerId && selectedCustomer && (
+                                <span className="text-sm text-white font-bold flex items-center gap-2 ml-auto">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                                    {selectedCustomer.name}
+                                    {selectedCustomer.ruc && <span className="text-slate-500 font-mono text-xs">({selectedCustomer.ruc})</span>}
+                                </span>
+                            )}
                         </div>
 
-                        {customerMode === 'anonymous' ? (
-                            <div className="bg-ueta-red/5 border border-ueta-red/10 p-6 rounded-2xl flex items-center gap-4 animate-in fade-in zoom-in duration-300">
-                                <div className="h-12 w-12 bg-ueta-red/20 rounded-2xl flex items-center justify-center">
-                                    <UserIcon className="h-6 w-6 text-ueta-red" />
-                                </div>
-                                <div>
-                                    <p className="text-white font-bold text-lg">Receptor: Consumidor Final</p>
-                                    <p className="text-slate-500 text-sm">Facturación rápida para clientes no registrados o ventas al detal.</p>
-                                </div>
-                            </div>
-                        ) : customerMode === 'existing' ? (
+                        {/* Contenido según el modo */}
+                        {customerMode === 'existing' && (
                             <select
                                 value={customerId}
                                 onChange={(e) => setCustomerId(e.target.value)}
-                                className="select"
+                                className="select text-sm h-10"
                             >
                                 <option value="">Buscar o seleccionar cliente...</option>
                                 {customers.map((c: any) => (
@@ -273,88 +265,72 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                     </option>
                                 ))}
                             </select>
-                        ) : (
-                            <div className="space-y-6 animate-in fade-in duration-300">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div className="md:col-span-2">
-                                        <label className="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">Tipo de Receptor</label>
-                                        <select
-                                            value={customerData.clientType}
-                                            onChange={(e) => setCustomerData({ ...customerData, clientType: e.target.value })}
-                                            className="input text-sm"
-                                        >
-                                            <option value="02">Consumidor Final</option>
-                                            <option value="01">Contribuyente (Empresa/Natural)</option>
-                                            <option value="04">Extranjero</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">Email</label>
-                                        <input
-                                            type="email"
-                                            value={customerData.email}
-                                            onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
-                                            placeholder="cliente@ejemplo.com"
-                                            className="input text-sm"
-                                        />
-                                    </div>
-                                </div>
+                        )}
 
-                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                    <div className="md:col-span-2">
-                                        <label className="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">Razón Social / Nombre Completo</label>
+                        {customerMode === 'manual' && (
+                            <div className="grid grid-cols-2 md:grid-cols-6 gap-3 animate-in fade-in duration-200">
+                                <div className="col-span-2">
+                                    <input
+                                        type="text"
+                                        value={customerData.name}
+                                        onChange={(e) => setCustomerData({ ...customerData, name: e.target.value })}
+                                        placeholder="Nombre o Razón Social *"
+                                        className="input text-sm h-10"
+                                    />
+                                </div>
+                                <div className="col-span-1">
+                                    <select
+                                        value={customerData.clientType}
+                                        onChange={(e) => setCustomerData({ ...customerData, clientType: e.target.value })}
+                                        className="input text-sm h-10 text-slate-400"
+                                    >
+                                        <option value="02">Consumidor Final</option>
+                                        <option value="01">Contribuyente</option>
+                                        <option value="04">Extranjero</option>
+                                    </select>
+                                </div>
+                                {customerData.clientType === '01' && (
+                                    <>
                                         <input
                                             type="text"
-                                            value={customerData.name}
-                                            onChange={(e) => setCustomerData({ ...customerData, name: e.target.value })}
-                                            placeholder="Ej: Ángel Nereira o Plenty Hub Corp"
-                                            className="input text-sm"
+                                            value={customerData.ruc}
+                                            onChange={(e) => setCustomerData({ ...customerData, ruc: e.target.value })}
+                                            placeholder="RUC"
+                                            className="input font-mono text-sm h-10"
                                         />
-                                    </div>
-                                    {customerData.clientType === '01' && (
-                                        <>
-                                            <div className="md:col-span-1">
-                                                <label className="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">RUC</label>
-                                                <input
-                                                    type="text"
-                                                    value={customerData.ruc}
-                                                    onChange={(e) => setCustomerData({ ...customerData, ruc: e.target.value })}
-                                                    placeholder="0-000-0000"
-                                                    className="input font-mono text-sm"
-                                                />
-                                            </div>
-                                            <div className="md:col-span-1">
-                                                <label className="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">DV</label>
-                                                <input
-                                                    type="text"
-                                                    maxLength={2}
-                                                    value={customerData.dv}
-                                                    onChange={(e) => setCustomerData({ ...customerData, dv: e.target.value })}
-                                                    placeholder="00"
-                                                    className="input font-mono text-sm"
-                                                />
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">Dirección Física</label>
+                                        <input
+                                            type="text"
+                                            maxLength={2}
+                                            value={customerData.dv}
+                                            onChange={(e) => setCustomerData({ ...customerData, dv: e.target.value })}
+                                            placeholder="DV"
+                                            className="input font-mono text-sm h-10 w-16"
+                                        />
+                                    </>
+                                )}
+                                <input
+                                    type="email"
+                                    value={customerData.email}
+                                    onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
+                                    placeholder="Email"
+                                    className="input text-sm h-10"
+                                />
+                                <div className="col-span-2 md:col-span-6">
                                     <input
                                         type="text"
                                         value={customerData.address}
                                         onChange={(e) => setCustomerData({ ...customerData, address: e.target.value })}
-                                        placeholder="Calle, Edificio, Oficina..."
-                                        className="input text-sm"
+                                        placeholder="Dirección (opcional)"
+                                        className="input text-sm h-10"
                                     />
                                 </div>
                             </div>
                         )}
 
                         {((customerMode === 'existing' && !customerId) || (customerMode === 'manual' && !customerData.name)) && (
-                            <div className="mt-6 flex items-center gap-2 text-amber-500/80 text-xs font-bold bg-amber-500/5 p-3 rounded-xl border border-amber-500/10">
-                                <AlertCircle className="h-4 w-4" />
-                                Complete la información del cliente para habilitar la facturación.
+                            <div className="flex items-center gap-2 text-amber-500/80 text-xs font-bold mt-3">
+                                <AlertCircle className="h-3 w-3" />
+                                {customerMode === 'existing' ? 'Seleccione un cliente' : 'Ingrese el nombre del cliente'}
                             </div>
                         )}
                     </section>
