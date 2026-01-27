@@ -247,26 +247,6 @@ const styles = StyleSheet.create({
         marginTop: 4,
         textAlign: 'center',
         fontFamily: 'Courier',
-    },
-    complianceBox: {
-        marginTop: 10,
-        marginBottom: 10,
-        backgroundColor: '#F0FDF4',
-        borderRadius: 8,
-        padding: 8,
-        borderLeftWidth: 4,
-        borderLeftColor: '#10B981',
-    },
-    complianceTitle: {
-        fontSize: 8,
-        fontWeight: 'bold',
-        color: '#059669',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    complianceText: {
-        fontSize: 7,
-        color: '#065F46',
     }
 });
 
@@ -406,7 +386,7 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
                 </View>
 
                 {/* Signature / Approval Section */}
-                <View style={{ marginTop: 50, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
+                <View style={{ marginTop: 30, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
                     <View style={{ alignItems: 'center' }}>
                         <View style={{ width: 150, borderBottomWidth: 1, borderBottomColor: '#000', marginBottom: 5 }} />
                         <Text style={{ fontSize: 8, color: '#374151', fontWeight: 'bold' }}>RECIBIDO CONFORME</Text>
@@ -422,12 +402,6 @@ export const InvoicePDF = ({ invoice, items, customer, tenant }: InvoiceProps) =
 
             {/* Footer */}
             <View style={styles.footer}>
-                <View style={styles.complianceBox}>
-                    <Text style={styles.complianceTitle}>ESTRUCTURA DGI VALIDADA</Text>
-                    <Text style={styles.complianceText}>
-                        Este documento es una representación gráfica de una factura electrónica (CUFE).
-                    </Text>
-                </View>
                 <Text style={styles.cufeText}>
                     CUFE: {invoice.cufe || '000000000-0000-0000-0000-000000000000'}
                 </Text>
