@@ -439,19 +439,26 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                     </div>
                                                 </td>
 
-                                                {/* PRECIO UNITARIO - Currency Input */}
+                                                {/* PRECIO UNITARIO - Simple Number Input */}
                                                 <td className="p-4 align-top">
                                                     <div className="relative">
                                                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm font-medium">$</span>
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             inputMode="decimal"
-                                                            value={(item.unitPrice / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            step="0.01"
+                                                            min="0"
+                                                            placeholder="0.00"
+                                                            value={item.unitPrice === 0 ? '' : (item.unitPrice / 100)}
                                                             onChange={(e) => {
-                                                                const rawValue = e.target.value.replace(/[^0-9.]/g, '');
-                                                                updateItem(index, 'unitPriceUI', rawValue);
+                                                                const val = e.target.value;
+                                                                if (val === '' || val === '0') {
+                                                                    updateItem(index, 'unitPriceUI', '0');
+                                                                } else {
+                                                                    updateItem(index, 'unitPriceUI', val);
+                                                                }
                                                             }}
-                                                            className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white outline-none focus:ring-2 focus:ring-red-500/20"
+                                                            className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white outline-none focus:ring-2 focus:ring-red-500/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                         />
                                                     </div>
                                                 </td>
@@ -560,14 +567,21 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                 <div className="relative">
                                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
                                                     <input
-                                                        type="text"
+                                                        type="number"
                                                         inputMode="decimal"
-                                                        value={(item.unitPrice / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        step="0.01"
+                                                        min="0"
+                                                        placeholder="0.00"
+                                                        value={item.unitPrice === 0 ? '' : (item.unitPrice / 100)}
                                                         onChange={(e) => {
-                                                            const rawValue = e.target.value.replace(/[^0-9.]/g, '');
-                                                            updateItem(index, 'unitPriceUI', rawValue);
+                                                            const val = e.target.value;
+                                                            if (val === '' || val === '0') {
+                                                                updateItem(index, 'unitPriceUI', '0');
+                                                            } else {
+                                                                updateItem(index, 'unitPriceUI', val);
+                                                            }
                                                         }}
-                                                        className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white"
+                                                        className="w-full h-11 bg-zinc-900 border border-zinc-700 focus:border-red-500 rounded-lg pl-7 pr-3 text-right text-sm font-bold text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                     />
                                                 </div>
                                             </div>
@@ -587,8 +601,8 @@ export default function NewInvoiceForm({ customers, products, tenantId, tenant }
                                                             type="button"
                                                             onClick={() => updateItem(index, 'taxCode', tax.code)}
                                                             className={`h-11 flex-1 rounded-lg text-sm font-bold transition-all ${item.taxCode === tax.code
-                                                                    ? 'bg-red-500 text-white'
-                                                                    : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                                                ? 'bg-red-500 text-white'
+                                                                : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
                                                                 }`}
                                                         >
                                                             {tax.label}
